@@ -1,16 +1,44 @@
-<html lang="zh-cn">
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+const pageTitle = "关于我";
+
+const identity = {
+  firstName: "袁焕予",
+  country: "中国",
+  occupation: "技术撰稿人",
+  hobbies: ["撞树", "遛鸟", "打太极"],
+};
+const skills = ["HTML", "CSS", "JavaScript", "React", "Astro", "Writing Docs"];
+---
+
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type ="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content = {Astro.generator} >
-    <title>Astro</title>
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
   </head>
   <body>
-    <a href="/">首页</a>
-    <a href="/about/">关于</a>
+    <Header />
+    
     <h1>我是袁焕予，这是我的个人blog网站</h1>
     <h2>关于本站</h2>
     <p>目前我还在学习当中，本站多有不足，还请海涵</p>
+    <p>以下是关于我的几个事实：</p>
+    <ul>
+    <li>我的名字是{identity.firstName}.</li>
+    <li>我住在{identity.country}。我的职业是{identity.occupation}。</li>
+    {identity.hobbies.length >= 2 &&
+        <li>我的两个习惯：{identity.hobbies[0]}和{identity.hobbies[1]}</li>
+    }
+    </ul>
+    <p>我的技能是：</p>
+    <ul>
+    {skills.map((skill) => <li class="skill">{skill}</li>)}
+    </ul>
   </body>
+  <Footer />
 </html>
