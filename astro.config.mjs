@@ -6,9 +6,8 @@ import rehypeKatex from 'rehype-katex';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://C-L1gh7.github.io/My_blog/',  // 改成你的 GitHub Pages 地址
-  // Only use base path in production (GitHub Pages)
-  base: process.env.NODE_ENV === 'production' ? '/My_blog' : '/',  // 改成你的仓库名
+  site: 'https://c-l1gh7.github.io/My_blog/',
+  base: process.env.NODE_ENV === 'production' ? '/My_blog' : '/',
   integrations: [sitemap()],
   markdown: {
     // 添加数学公式插件
