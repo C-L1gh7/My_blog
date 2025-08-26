@@ -39,6 +39,9 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     
     <link rel="sitemap" href={`${base}sitemap-index.xml`} />
     <link rel="alternate" type="application/rss+xml" title="RSS" href={`${base}rss.xml`} />
+
+    <!-- 添加 KaTeX 数学公式样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
   </head>
   <body>
     <div class="container center">
@@ -144,9 +147,12 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
               }
               
               // Adjust dropdown position if it goes outside container
-              if (dropdown.getBoundingClientRect().right > container.getBoundingClientRect().right) {
-                dropdown.style.left = "auto";
-                dropdown.style.right = "0";
+              if (
+                container &&
+                dropdown.getBoundingClientRect().right > container.getBoundingClientRect().right
+              ) {
+                (dropdown as HTMLElement).style.left = "auto";
+                (dropdown as HTMLElement).style.right = "0";
               }
             });
             

@@ -1,6 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,6 +11,9 @@ export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/astro-theme-terminal' : '/',
   integrations: [sitemap()],
   markdown: {
+    // 添加数学公式插件
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex],
     shikiConfig: {
       theme: 'css-variables',
       langs: [],
