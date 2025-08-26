@@ -1,5 +1,5 @@
 ---
-import FormattedDate from './FormattedDate.astro';
+import FormattedDate from "./FormattedDate.astro";
 
 export interface Props {
   post: {
@@ -17,14 +17,20 @@ export interface Props {
 }
 
 const { post } = Astro.props;
-const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + "/";
 const postUrl = post.data.externalLink || `${base}posts/${post.slug}/`;
 const isExternal = !!post.data.externalLink;
 ---
 
 <article class="post on-list">
   <h2 class="post-title">
-    <a href={postUrl} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noopener" : undefined}>
+    <a
+      href={postUrl}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener" : undefined}
+    >
       {post.data.title}
     </a>
   </h2>
@@ -32,31 +38,43 @@ const isExternal = !!post.data.externalLink;
     <time class="post-date">
       <FormattedDate date={post.data.pubDate} />
     </time>
-    {post.data.author && (
-      <span class="post-author">{post.data.author}</span>
-    )}
+    {post.data.author && <span class="post-author">{post.data.author}</span>}
   </div>
-  {post.data.tags && post.data.tags.length > 0 && (
-    <span class="post-tags">
-      {post.data.tags.map((tag, index) => (
-        <>
-          <a href={`${base}tags/${tag}/`}>{tag}</a>{index < post.data.tags.length - 1 && ', '}
-        </>
-      ))}
-    </span>
-  )}
-  {post.data.image && (
-    <figure class="post-cover">
-      <img src={post.data.image} alt={post.data.title} />
-    </figure>
-  )}
-  {post.data.description && (
-    <div class="post-content">
-      <p>{post.data.description}</p>
-    </div>
-  )}
+  {
+    post.data.tags && post.data.tags.length > 0 && (
+      <span class="post-tags">
+        {post.data.tags
+          .filter((tag) => tag && tag.trim()) // 过滤掉空标签
+          .map((tag, index, filteredTags) => (
+            <>
+              <a href={`${base}tags/${tag}/`}>{tag}</a>
+              {index < filteredTags.length - 1 && <span> </span>}
+            </>
+          ))}
+      </span>
+    )
+  }
+  {
+    post.data.image && (
+      <figure class="post-cover">
+        <img src={post.data.image} alt={post.data.title} />
+      </figure>
+    )
+  }
+  {
+    post.data.description && (
+      <div class="post-content">
+        <p>{post.data.description}</p>
+      </div>
+    )
+  }
   <div>
-    <a href={postUrl} class="read-more button inline" target={isExternal ? "_blank" : undefined} rel={isExternal ? "noopener" : undefined}>
+    <a
+      href={postUrl}
+      class="read-more button inline"
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener" : undefined}
+    >
       [了解更多]
     </a>
   </div>

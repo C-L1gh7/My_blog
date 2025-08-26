@@ -8,19 +8,32 @@ const posts = (await getCollection('posts'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<BaseLayout title="Terminal">
+<BaseLayout title="首页">
   <div class="index-content framed">
-    <h1 id="hello-there">你好!</h1>
-    <p>欢迎来到我的网站，这是这个网站的第一句话</p>
-    <p>
-      You can customise the colour scheme using panr's <a href="https://panr.github.io/terminal-css/"><strong>Terminal.css</strong></a> 
-      generator - all generated schemes are fully compatible with this theme.
-    </p>
-    <p>
-      <a href="https://panr.github.io/terminal-css/">
-        <img src="https://panr.github.io/hugo-theme-terminal-demo/img/terminal-css.png" alt="Terminal.css Preview" />
-      </a>
-    </p>
+    <h1 id="hello-there">👋你好! 我是 袁焕予 / C_L1gh7</h1>
+    <p><strong>光电信息科学与工程</strong>本科在读</p>
+    
+    <p>💡 这里是我的个人博客：</p>
+    <ul>
+      <li>🧪 科研历程和项目介绍</li>
+      <li>📖 学习笔记以及技术分享</li>
+      <li>💭 个人随笔和闲聊</li>
+    </ul>
+    
+    <p>⚙️ 我的技术栈：</p>
+    <ul>
+      <li>💻 编程语言：Python, C</li>
+      <li>📊 数据处理：OpenCV, NumPy, Matplotlib</li>
+      <li>🛠️ 仿真 & 建模：COMSOL, CAD, Blender</li>
+      <li>🌐 工具与平台：Git, LaTeX, GitHub</li>
+    </ul>
+    <!-- <p>🏆 个人荣誉：</p>
+    <ul>
+      <li>全国大学生光电设计竞赛 三等奖</li>
+      <li>全国大学生物理实验竞赛 三等奖</li>
+      <li>上海市大学生物理实验竞赛 一等奖</li>
+      <li>校级优秀学生、优秀奖学金二等奖</li>
+    </ul> -->
   </div>
   
   <div class="posts">
