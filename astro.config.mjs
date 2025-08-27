@@ -7,7 +7,7 @@ import rehypeKatex from 'rehype-katex';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://c-l1gh7.github.io/My_blog/',
-  base: process.env.NODE_ENV === 'production' ? '/My_blog' : '/',
+  base: '/My_blog',
   integrations: [sitemap()],
   markdown: {
     // 添加数学公式插件
