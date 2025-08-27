@@ -12,7 +12,7 @@ tags: ['技术分享','日常生活']
 conda create -n name python=3.13
 ```
 其中，conda是命令前缀；create是指令创建一个环境；name是你为这个环境所起的名字；python=3.13是告诉程序你希望安装的python版本
-![终端结果示意图](/pictures/posts/使用anaconda创建不同python版本的虚拟环境/6240fed7fd5049c7ba6ccabd5cce97c3.png)
+![终端结果示意图](/pictures/posts/conda-env/6240fed7fd5049c7ba6ccabd5cce97c3.png)
 当运行至此处时，按下y并回车继续
 # 激活虚拟环境
 创建该环境后，你需要将其激活。假如你希望在其中安装第三方库，这一步更是至关重要
