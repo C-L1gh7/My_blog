@@ -1,4 +1,4 @@
-/* Container */
+/* 容器 */
 .container {
   display: flex;
   flex-direction: column;
@@ -7,6 +7,8 @@
   min-height: 100vh;
   margin: 0 auto;
   border-right: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
+  /* 重置计数器 */
+  counter-reset: h2-counter;
 }
 
 .container.full,
@@ -23,9 +25,11 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  /* 确保内容区域也重置计数器 */
+  counter-reset: h2-counter;
 }
 
-/* Index content */
+/* 索引内容 */
 .index-content {
   margin-bottom: 40px;
 }
@@ -34,13 +38,13 @@
   margin-bottom: 60px;
 }
 
-/* Framed content */
+/* 带边框内容 */
 .framed {
   border: 3px solid var(--accent);
   padding: 20px;
 }
 
-/* Figure with caption - matching Hugo theme */
+/* 图片与标题 - 匹配Hugo主题 */
 figure {
   display: inline-block;
   margin: 25px auto;
@@ -53,10 +57,10 @@ figure {
 figure img {
   display: block;
   margin-bottom: -8px !important;
-  /* Image already has border from terminal.css */
+  /* 图片已经从terminal.css获得边框 */
 }
 
-/* Override figcaption from terminal.css to match Hugo theme */
+/* 覆盖terminal.css的figcaption以匹配Hugo主题 */
 figure figcaption {
   margin-top: 0 !important;
   padding: 15px 20px !important;
@@ -64,7 +68,7 @@ figure figcaption {
   color: var(--background) !important;
   font-weight: normal !important;
   text-align: center !important;
-  /* Thicker bottom border effect */
+  /* 加粗的底部边框效果 */
   border: none !important;
   border-radius: 0 !important;
   position: relative;
@@ -74,11 +78,10 @@ figure figcaption p {
   margin: 0;
 }
 
-/* Page styles and Heading Counters */
-.page, article {
+/* 页面样式 */
+.page {
   max-width: 100%;
   margin: 0 auto;
-  counter-reset: h2-counter; /* 初始化 H2 计数器 */
 }
 
 .page h1, 
@@ -101,76 +104,87 @@ article h1::after {
   border-bottom: 3px dotted var(--accent);
 }
 
-/* H2 样式 - 主章节 */
-.page h2, 
-article h2 {
+/* LaTeX风格的标题编号系统 */
+/* 二级标题 (h2) */
+h2 {
   counter-increment: h2-counter;
-  counter-reset: h3-counter h4-counter; /* 重置 H3 和 H4 计数器 */
-  position: relative;
-  color: var(--accent);
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  font-size: 1.75rem;
-  font-weight: 600;
-  padding-left: 3rem; /* 为编号留出空间 */
+  counter-reset: h3-counter;
+  display: flex;
+  align-items: baseline;
 }
 
-.page h2::before,
-article h2::before {
-  content: counter(h2-counter) ". ";
-  position: absolute;
-  left: 0;
+h2::before {
+  content: counter(h2-counter) ".";
+  font-weight: bold;
   color: var(--accent);
-  font-weight: 700;
+  margin-right: 0.5em;
+  flex-shrink: 0;
 }
 
-/* H3 样式 - 子章节 */
-.page h3, 
-article h3 {
+/* 三级标题 (h3) */
+h3 {
   counter-increment: h3-counter;
-  counter-reset: h4-counter; /* 重置 H4 计数器 */
-  position: relative;
-  color: var(--foreground);
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
-  font-size: 1.5rem;
-  font-weight: 600;
-  padding-left: 4rem; /* 为编号留出更多空间 */
+  counter-reset: h4-counter;
+  display: flex;
+  align-items: baseline;
 }
 
-.page h3::before,
-article h3::before {
-  content: counter(h2-counter) "." counter(h3-counter) " ";
-  position: absolute;
-  left: 0;
+h3::before {
+  content: counter(h2-counter) "." counter(h3-counter);
+  font-weight: bold;
   color: var(--accent);
-  font-weight: 700;
+  margin-right: 0.5em;
+  flex-shrink: 0;
 }
 
-/* H4 样式 - 三级章节 */
-.page h4, 
-article h4 {
+/* 四级标题 (h4) */
+h4 {
   counter-increment: h4-counter;
-  position: relative;
-  color: var(--foreground);
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-  padding-left: 5rem; /* 为编号留出更多空间 */
+  counter-reset: h5-counter;
+  display: flex;
+  align-items: baseline;
 }
 
-.page h4::before,
-article h4::before {
-  content: counter(h2-counter) "." counter(h3-counter) "." counter(h4-counter) " ";
-  position: absolute;
-  left: 0;
+h4::before {
+  content: counter(h2-counter) "." counter(h3-counter) "." counter(h4-counter);
+  font-weight: bold;
   color: var(--accent);
-  font-weight: 700;
-  font-size: 0.9em;
+  margin-right: 0.5em;
+  flex-shrink: 0;
 }
 
-/* Responsive */
+/* 五级标题 (h5) - 可选 */
+h5 {
+  counter-increment: h5-counter;
+  counter-reset: h6-counter;
+  display: flex;
+  align-items: baseline;
+}
+
+h5::before {
+  content: counter(h2-counter) "." counter(h3-counter) "." counter(h4-counter) "." counter(h5-counter);
+  font-weight: bold;
+  color: var(--accent);
+  margin-right: 0.5em;
+  flex-shrink: 0;
+}
+
+/* 六级标题 (h6) - 可选 */
+h6 {
+  counter-increment: h6-counter;
+  display: flex;
+  align-items: baseline;
+}
+
+h6::before {
+  content: counter(h2-counter) "." counter(h3-counter) "." counter(h4-counter) "." counter(h5-counter) "." counter(h6-counter);
+  font-weight: bold;
+  color: var(--accent);
+  margin-right: 0.5em;
+  flex-shrink: 0;
+}
+
+/* 响应式布局 */
 @media (max-width: 684px) {
   .container {
     padding: 20px;
@@ -179,14 +193,9 @@ article h4::before {
   .content {
     margin-top: 20px;
   }
-
-  /* 响应式标题编号 */
-  .page h2, article h2 { padding-left: 2.5rem; }
-  .page h3, article h3 { padding-left: 3rem; }
-  .page h4, article h4 { padding-left: 3.5rem; }
 }
 
-/* Print styles */
+/* 打印样式 */
 @media print {
   .container {
     display: initial;
@@ -197,7 +206,7 @@ article h4::before {
   }
 }
 
-/* Utility classes */
+/* 工具类 */
 .text-center {
   text-align: center;
 }
@@ -226,14 +235,14 @@ article h4::before {
   margin-top: 0 !important;
 }
 
-/* Clearfix */
+/* 清除浮动 */
 .clearfix::after {
   content: "";
   display: table;
   clear: both;
 }
 
-/* Lists with dashes */
+/* 带破折号的列表 */
 ul {
   list-style: none;
 }
@@ -249,12 +258,12 @@ ul li:not(:empty)::before {
   color: var(--accent);
 }
 
-/* Nested lists */
+/* 嵌套列表 */
 ul ul {
   margin-left: 20px;
 }
 
-/* Selection */
+/* 选中文本样式 */
 ::selection {
   background: var(--accent);
   color: var(--background);
