@@ -74,10 +74,11 @@ figure figcaption p {
   margin: 0;
 }
 
-/* Page styles */
-.page {
+/* Page styles and Heading Counters */
+.page, article {
   max-width: 100%;
   margin: 0 auto;
+  counter-reset: h2-counter; /* 初始化 H2 计数器 */
 }
 
 .page h1, 
@@ -100,6 +101,75 @@ article h1::after {
   border-bottom: 3px dotted var(--accent);
 }
 
+/* H2 样式 - 主章节 */
+.page h2, 
+article h2 {
+  counter-increment: h2-counter;
+  counter-reset: h3-counter h4-counter; /* 重置 H3 和 H4 计数器 */
+  position: relative;
+  color: var(--accent);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  padding-left: 3rem; /* 为编号留出空间 */
+}
+
+.page h2::before,
+article h2::before {
+  content: counter(h2-counter) ". ";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* H3 样式 - 子章节 */
+.page h3, 
+article h3 {
+  counter-increment: h3-counter;
+  counter-reset: h4-counter; /* 重置 H4 计数器 */
+  position: relative;
+  color: var(--foreground);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding-left: 4rem; /* 为编号留出更多空间 */
+}
+
+.page h3::before,
+article h3::before {
+  content: counter(h2-counter) "." counter(h3-counter) " ";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* H4 样式 - 三级章节 */
+.page h4, 
+article h4 {
+  counter-increment: h4-counter;
+  position: relative;
+  color: var(--foreground);
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding-left: 5rem; /* 为编号留出更多空间 */
+}
+
+.page h4::before,
+article h4::before {
+  content: counter(h2-counter) "." counter(h3-counter) "." counter(h4-counter) " ";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.9em;
+}
+
 /* Responsive */
 @media (max-width: 684px) {
   .container {
@@ -109,6 +179,11 @@ article h1::after {
   .content {
     margin-top: 20px;
   }
+
+  /* 响应式标题编号 */
+  .page h2, article h2 { padding-left: 2.5rem; }
+  .page h3, article h3 { padding-left: 3rem; }
+  .page h4, article h4 { padding-left: 3.5rem; }
 }
 
 /* Print styles */
