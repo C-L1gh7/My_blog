@@ -20,6 +20,7 @@ const PostCard = ({ post }: { post: PostProps }) => {
 
     const hasImage = !!post.image;
     const [isHovered, setIsHovered] = useState(false);
+    const baseUrl = import.meta.env.BASE_URL;
     
     const cardVariants = {
         hover: {
@@ -57,7 +58,7 @@ const PostCard = ({ post }: { post: PostProps }) => {
     };
 
     return (
-    <a href={`/posts/${post.slug}`} className="block relative">
+    <a href={`${baseUrl}posts/${post.slug}`} className="block relative">
         <motion.article 
             layout
             variants={cardVariants}
