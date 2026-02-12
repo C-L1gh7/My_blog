@@ -4,22 +4,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Navbar from '../../components/Navbar';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
-  return posts.map(post => ({
-    params: { slug: post.slug },
-    props: { post },
+  const studies = await getCollection('studies');
+  return studies.map(study => ({
+    params: { slug: study.slug },
+    props: { study },
   }));
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { study } = Astro.props;
+const { Content } = await study.render();
 ---
 
-<BaseLayout title={post.data.title}>
+<BaseLayout title={study.data.title}>
     <Navbar client:load />
 
     <div class="content-container pt-28 pb-20">
-      <a href="/posts" id="go-back" class="inline-block mb-8 font-mono text-xs font-bold hover:text-red-600 transition-colors">
+      <a href="/studies" id="go-back" class="inline-block mb-8 font-mono text-xs font-bold hover:text-red-600 transition-colors">
         &larr; GO BACK
       </a>
 
@@ -40,20 +40,11 @@ const { Content } = await post.render();
           <article class="prose prose-lg prose-invert max-w-none mx-auto">
             <header class="mb-12 border-b-2 border-black pb-8">
                 <div class="flex items-center gap-3 font-mono text-xs font-bold text-gray-500 mb-4">
-                    <span class="text-black">{post.data.date}</span>
+                    <span class="text-black">{study.data.course}</span>
                     <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
-                    <span class="uppercase tracking-wider text-red-600">{post.data.tag || 'GENERAL'}</span>
+                    <span class="uppercase tracking-wider text-red-600">{study.data.date}</span>
                 </div>
-                <h1 class="text-3xl md:text-5xl font-black uppercase tracking-tight mb-6 leading-tight">{post.data.title}</h1>
-                {post.data.image && (
-                    <div class="w-full bg-gray-100 mt-8 border-2 border-black overflow-hidden relative flex justify-center items-center">
-                        <img 
-                            src={post.data.image} 
-                            alt={post.data.title} 
-                            class="max-w-full h-auto max-h-[600px] object-contain"
-                        />
-                    </div>
-                )}
+                <h1 class="text-3xl md:text-4xl font-black uppercase tracking-tight mb-6 leading-tight">{study.data.title}</h1>
             </header>
 
             <div class="font-serif leading-relaxed text-lg text-gray-800">

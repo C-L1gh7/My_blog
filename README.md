@@ -1,241 +1,94 @@
-# Astro Terminal Theme
+# Astro 博客项目
 
-I love both Astro and the Terminal theme by panr, so I decided to port this theme to Astro. This is an adaptation of the [Hugo Terminal Theme](https://github.com/panr/hugo-theme-terminal) created by [panr](https://github.com/panr). All design credit goes to the original author.
+这是一个基于 [Astro](https://astro.build)、[React](https://reactjs.org) 和 [Tailwind CSS](https://tailwindcss.com) 构建的个人博客项目。它采用了复古/磁带风格的设计。
 
-![Terminal Theme Screenshot](https://panr.github.io/hugo-theme-terminal-demo/img/terminal-css.png)
+## 项目结构
 
-- [Demo site](https://dennisklappe.github.io/astro-theme-terminal/)
-- [Terminal.css - Create your own colour scheme](https://panr.github.io/terminal-css/)
+该项目遵循标准的 Astro 项目结构：
 
-## Features
-
-- **Customisable colour schemes** — works with panr's [Terminal.css colour scheme generator](https://panr.github.io/terminal-css/) or choose from the default schemes available there
-- **[Fira Code](https://github.com/tonsky/FiraCode)** as default monospaced font — easily changeable
-- **nice syntax highlighting** — thanks to Astro's built-in Shiki support
-- **fully responsive** — works great on mobile and desktop
-- **tag support** — organise posts with tags and browse by tag
-- **RSS feed** — automatically generated RSS feed for your blog
-
-## Requirements
-
-- Astro v5.0.0 or higher
-- Node.js 18 or higher
-
-## Installation
-
-### Clone repository
-
-```bash
-git clone https://github.com/dennisklappe/astro-theme-terminal.git your-site-name
-cd your-site-name
-npm install
+```text
+astro_blog/
+├── public/             # 静态资源（字体、图标等）
+├── src/
+│   ├── components/     # 可复用的 UI 组件（React & Astro）
+│   │   ├── Icons.tsx       #SVG 图标
+│   │   ├── Navbar.tsx      # 导航栏
+│   │   ├── PostCard.tsx    # 博客文章预览卡片
+│   │   └── ProfileCard.tsx # 侧边栏个人资料卡片
+│   ├── content/        # 内容集合
+│   │   ├── config.ts       # 内容架构定义
+│   │   └── posts/          # Markdown 博客文章（.md 文件）
+│   ├── layouts/        # 页面布局
+│   │   └── BaseLayout.astro # 主 HTML 包装器
+│   ├── pages/          # 应用路由
+│   │   ├──KXindex.astro     # 首页
+│   │   ├── about.astro     # 关于页面
+│   │   └── posts/          # 动态文章路由
+│   │       └── [...slug].astro
+│   ├── styles/         # 全局样式（如有）
+│   └── env.d.ts        # TypeScript 声明
+├── astro.config.mjs    # Astro 配置
+├── tailwind.config.mjs # Tailwind CSS 配置
+└── package.json        # 依赖和脚本
 ```
 
-### Use as a template
+## 维护指南
 
-You can also use this repository as a template on GitHub:
+### 1. 添加新的博客文章
 
-1. Click the "Use this template" button on the GitHub repository
-2. Create a new repository from the template
-3. Clone your new repository and install dependencies
+要添加一篇新文章，请在 `src/content/posts/` 目录下创建一个新的 Markdown 文件。
+文件**必须**包含以下格式的头部信息（Frontmatter）：
 
-## How to start
-
-```bash
-npm run dev
-```
-
-## How to build
-
-```bash
-npm run build
-```
-
-## Configuration
-
-### Site Configuration
-
-Edit `astro.config.mjs`:
-
-```js
-import { defineConfig } from 'astro/config';
-
-export default defineConfig({
-  site: 'https://your-domain.com',
-  markdown: {
-    shikiConfig: {
-      theme: 'css-variables',
-      langs: [],
-      wrap: true,
-    },
-  },
-});
-```
-
-### Theme Configuration
-
-The theme uses CSS custom properties for theming. To change colours, modify the variables in `src/styles/terminal.css`:
-
-```css
-:root {
-  --background: #1e2022;
-  --foreground: #d6deeb;
-  --accent: #ffa86a;
-  --secondary: #8be9fd;
-  --selection: #4c5f7a;
-  --code-border: #4c5f7a;
-  --comment: #637777;
-}
-```
-
-You can also use panr's [Terminal.css generator](https://panr.github.io/terminal-css/) to create your own colour scheme - this Astro port is fully compatible with the generated colour schemes.
-
-### Navigation Menu
-
-Edit the navigation in `src/layouts/BaseLayout.astro`. The theme includes a dropdown menu for additional pages:
-
-```astro
-<!-- Main navigation items -->
-<li><a href="/about">About</a></li>
-<li><a href="/posts/showcase">Showcase</a></li>
-
-<!-- Dropdown menu -->
-<ul class="menu__dropdown">
-  <li><a href="/posts">Posts</a></li>
-  <li><a href="/tags">Tags</a></li>
-  <li><a href="/posts/rich-content">Rich Content</a></li>
-</ul>
-```
-
-## Content
-
-### Posts
-
-Create posts in `src/content/posts/`:
-
-```md
+```markdown
 ---
-title: 'My First Post'
-description: 'This is my first blog post'
-pubDate: 2024-01-01
-author: 'Your Name'
-tags: ['astro', 'terminal']
+title: '你的文章标题'
+date: 'YYYY-MM-DD'       # 例如：2023-10-27
+tag: '分类名称'           # 可选，默认为 'GENERAL'
+excerpt: '文章的简短摘要。'
+image: 'https://...'     # 可选，封面图片的 URL
 ---
 
-Your content here...
+# 这里是正文
+
+使用 Markdown 编写你的文章内容。
 ```
 
-### Pages
+### 2. 图片使用指南
 
-Create pages in `src/pages/`:
+**方式一：本地图片（推荐）**
+1. 将图片放入 `public/` 文件夹（建议新建 `public/images/` 文件夹）。
+2. 在 Frontmatter 中使用绝对路径引用：
+   ```yaml
+   image: '/images/my-pic.jpg'  # 对应文件 public/images/my-pic.jpg
+   ```
 
-```astro
----
-import BaseLayout from '../layouts/BaseLayout.astro';
----
+**方式二：在线图片**
+直接填写完整的图片 URL 地址即可。
 
-<BaseLayout title="About">
-  <div class="page">
-    <h1>About</h1>
-    <p>Your content here...</p>
-  </div>
-</BaseLayout>
-```
+### 3. 修改 UI 组件
 
-## Syntax Highlighting
+- **导航栏：** 编辑 `src/components/Navbar.tsx`。
+- **个人信息：** 编辑 `src/components/ProfileCard.tsx` 以更新头像、简介和社交链接。
+- **文章预览：** 编辑 `src/components/PostCard.tsx` 以更改文章在列表页的显示方式。
+- **图标：** 在 `src/components/Icons.tsx` 中添加或修改 SVG 图标。
 
-The theme uses Astro's built-in Shiki syntax highlighter with a custom monochrome theme that matches the terminal aesthetic. Code blocks automatically get syntax highlighting:
+### 3. 布局与样式
 
-```js
-// JavaScript example
-function hello() {
-  console.log("Hello, World!");
-}
-```
+- **全局布局：** `src/layouts/BaseLayout.astro` 包含了 `<html>`、`<head>` 和 `<body>` 标签，以及全局样式（字体、滚动条等）。
+- **样式：** 项目使用 Tailwind CSS。你可以修改 `tailwind.config.mjs` 来自定义主题（如颜色、字体）。
 
-## Layouts
+### 4. 配置
 
-### BaseLayout
+- **内容架构：** 如果你想为博客文章添加新字段（例如作者、阅读时间），请更新 `src/content/config.ts` 中的架构定义。
+- **Astro 配置：** `astro.config.mjs` 处理 React 和 Tailwind 等集成配置。
 
-The main layout that includes header, footer, and all necessary CSS imports.
+## 开发命令
 
-### PostLayout
+在终端中从项目根目录运行以下命令：
 
-Layout specifically for posts, includes metadata display and post navigation.
-
-## Components
-
-- **Header** - Site header with terminal decoration
-- **Footer** - Site footer with copyright
-- **PostCard** - Post preview card
-- **Pagination** - Page navigation component
-- **FormattedDate** - Date formatting component
-
-## Features
-
-### Tags
-
-Posts can be organised with tags. Each tag gets its own page at `/tags/[tag-name]` showing all posts with that tag. A tag index page at `/tags` displays all available tags.
-
-
-## Customization
-
-### Fonts
-
-To change the monospace font, update the font import in `src/styles/fonts.css` and the font-family in `src/styles/terminal.css`.
-
-### Colours
-
-Create your own colour scheme or choose from the default schemes using panr's [Terminal.css generator](https://panr.github.io/terminal-css/).
-
-### CSS Structure
-
-The theme uses modular CSS files:
-- `terminal.css` - Core theme styles and variables
-- `fonts.css` - Font imports and utilities
-- `main.css` - Layout and utility classes
-- `header.css` - Header styles
-- `menu.css` - Navigation menu
-- `footer.css` - Footer styles
-- `post.css` - Post styles
-- `buttons.css` - Button components
-- `code.css` - Code block functionality
-- `syntax.css` - Syntax highlighting theme
-- `pagination.css` - Pagination styles
-- `gist.css` - GitHub Gist embed styles
-- `terms.css` - Terms and conditions styles
-
-## Deployment
-
-### GitHub Pages
-
-This theme includes a GitHub Actions workflow for automatic deployment to GitHub Pages:
-
-1. Go to your repository Settings → Pages
-2. Set Source to "GitHub Actions"
-3. Push to the `main` branch or manually trigger the workflow
-4. Your site will be available at `https://[username].github.io/astro-theme-terminal`
-
-To deploy to a custom domain or different base path, update the `site` and `base` options in `astro.config.mjs`.
-
-**Note**: The base path is only applied in production builds. During development, the site runs at the root path (`/`) for easier testing.
-
-## Contributing
-
-If you find any bugs or have ideas for improvements, please open an issue or submit a pull request.
-
-## Credits
-
-This theme is a port of the [Hugo Terminal Theme](https://github.com/panr/hugo-theme-terminal) created by [panr](https://github.com/panr). All design decisions, colour schemes, and visual aesthetics are credited to the original author.
-
-Astro port created by [Dennis Klappe](https://github.com/dennisklappe).
-
-## License
-
-The original Hugo Terminal Theme is licensed under the MIT License. This Astro port maintains the same licence.
-
-Copyright for the original design: panr
-
----
-
-Made with love for the Astro community
+| 命令                      | 作用                                             |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | 安装依赖                                         |
+| `npm run dev`             | 在 `localhost:4321` 启动本地开发服务器           |
+| `npm run build`           | 构建生产环境站点到 `./dist/` 目录                |
+| `npm run preview`         | 在本地预览构建后的站点                           |

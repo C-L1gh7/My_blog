@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar';
+import { getCollection } from 'astro:content';
+
+const studies = await getCollection('studies');
+const sortedStudies = studies.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+// Group by Course
+const groupedStudies = sortedStudies.reduce((acc, study) => {
+    const course = study.data.course;
+    if (!acc[course]) acc[course] = [];
+    acc[course].push(study);
+    return acc;
+}, {} as Record<string, typeof studies>);
+
+const title = "Study Notes";
+---
+
+<BaseLayout title={title}>
+    <Navbar client:load />
+
+    <div class="content-container pt-28 pb-20">
+      <div class="flex items-end justify-between border-b-2 border-black pb-4 mb-12">
+            <h1 class="text-4xl font-black uppercase tracking-tight">Studies</h1>
+            <span class="font-mono text-xs font-bold">KNOWLEDGE BASE</span>
+      </div>
+      
+      <div class="space-y-12">
+        {Object.keys(groupedStudies).length > 0 ? (
+            Object.entries(groupedStudies).map(([course, courseStudies]) => (
+                <div class="bg-white border-2 border-black p-6 md:p-8 shadow-[8px_8px_0px_#1a1a1a]">
+                    <h2 class="text-2xl font-black uppercase tracking-tight mb-6 flex items-center gap-3">
+                        <span class="w-4 h-4 bg-black"></span>
+                        {course}
+                    </h2>
+                    
+                    <ul class="space-y-4">
+                        {courseStudies.map((study) => (
+                            <li class="border-b border-dashed border-gray-300 last:border-0 pb-3 last:pb-0">
+                                <a href={`/studies/${study.slug}`} class="group flex items-start justify-between gap-4 hover:bg-gray-50 transition-colors p-2 -mx-2 rounded">
+                                    <div>
+                                        <h3 class="font-bold font-mono group-hover:text-red-600 group-hover:underline decoration-2 underline-offset-4 transition-colors">
+                                            {study.data.title}
+                                        </h3>
+                                        <p class="text-xs text-gray-500 font-mono mt-1">
+                                            {study.data.date}
+                                        </p>
+                                    </div>
+                                    <span class="text-xs font-bold font-mono opacity-0 group-hover:opacity-100 transition-opacity">
+                                        READ &rarr;
+                                    </span>
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))
+        ) : (
+             <p class="text-gray-500 font-mono text-sm">No study notes found.</p>
+        )}
+      </div>
+    </div>
+</BaseLayout>

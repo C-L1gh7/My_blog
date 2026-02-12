@@ -1,0 +1,33 @@
+---
+interface Props {
+  note: any;
+}
+
+const { note } = Astro.props;
+const { Content } = await note.render();
+---
+
+<div class="bg-[#fffdf5] border border-black p-6 shadow-[4px_4px_0px_#1a1a1a] relative hover:-translate-y-1 transition-transform duration-200">
+    <div class="absolute -top-3 -right-3 bg-white border border-black px-2 py-1 font-mono text-[10px] font-bold uppercase transform rotate-2">
+        NOTE
+    </div>
+    
+    <div class="flex items-center gap-3 font-mono text-[10px] text-gray-400 mb-4">
+        <span class="text-black font-bold">{note.data.date}</span>
+        {note.data.tags && note.data.tags.map((tag: string) => (
+             <span class="text-gray-500">#{tag}</span>
+        ))}
+    </div>
+
+    <h3 class="text-lg font-bold mb-4 font-mono leading-tight uppercase">{note.data.title}</h3>
+    
+    <div class="prose prose-sm prose-p:my-2 prose-headings:my-2 mb-6 font-serif text-gray-600 leading-relaxed">
+        <Content />
+    </div>
+
+    {note.data.file && (
+        <a href={note.data.file} target="_blank" class="inline-flex items-center gap-2 px-3 py-1 bg-black text-white text-xs font-mono font-bold hover:bg-red-600 transition-colors">
+            ↓ DOWNLOAD ATTACHMENT
+        </a>
+    )}
+</div>

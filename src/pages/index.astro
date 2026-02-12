@@ -1,42 +1,83 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
+import Navbar from '../components/Navbar';
+import ProfileCard from '../components/ProfileCard';
+import PostList from '../components/PostList';
+import { IconGithub, IconMail } from '../components/Icons';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('posts'))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const allPosts = await getCollection('posts');
+const posts = allPosts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+    .map(post => ({...post.data, id: post.id, slug: post.slug}));
+
+const title = "C_L1gh7 - 个人博客";
 ---
 
-<BaseLayout title="首页">
-  <div class="index-content framed">
-    <h1 id="hello-there">👋你好! 我是 袁焕予 / C_L1gh7</h1>
-    <p><strong>光电信息科学与工程</strong>本科在读</p>
-    
-    <p>💡 这里是我的个人博客：</p>
-    <ul>
-      <li>🧪 科研历程和项目介绍</li>
-      <li>📖 学习笔记以及技术分享</li>
-      <li>💭 个人随笔和闲聊</li>
-    </ul>
-    
-    <p>⚙️ 我的技术栈：</p>
-    <ul>
-      <li>💻 编程语言：Python, C</li>
-      <li>📊 数据处理：OpenCV, NumPy, Matplotlib</li>
-      <li>🛠️ 仿真 & 建模：COMSOL, CAD, Blender</li>
-      <li>🌐 工具与平台：Git, LaTeX, GitHub</li>
-    </ul>
-    <!-- <p>🏆 个人荣誉：</p>
-    <ul>
-      <li>全国大学生光电设计竞赛 三等奖</li>
-      <li>全国大学生物理实验竞赛 三等奖</li>
-      <li>上海市大学生物理实验竞赛 一等奖</li>
-      <li>校级优秀学生、优秀奖学金二等奖</li>
-    </ul> -->
-  </div>
-  
-  <div class="posts">
-    {posts.map((post) => <PostCard post={post} />)}
-  </div>
+<BaseLayout title={title}>
+    <Navbar client:load />
+
+    <div class="content-container pt-28">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            {/* Left Sidebar: Profile Card (Sticky) */}
+            <aside class="lg:col-span-4 hidden lg:block h-full">
+                <ProfileCard />
+            </aside>
+
+            {/* Mobile Profile Header (Visible only on small screens) */}
+            <div class="lg:hidden col-span-1 mb-8">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 bg-black rounded-full overflow-hidden">
+                        <img src="https://pub-f15d478863f747a68de4bbf63631ccfe.r2.dev/PicGo/%E5%A4%B4%E5%83%8F.jpg" class="w-full h-full object-cover" alt="Avatar"/>
+                    </div>
+                    <div>
+                        <h2 class="font-black uppercase text-lg">C_L1gh7</h2>
+                        <p class="text-xs text-gray-600">光电信息科学与工程 / Retro Fan</p>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-600 leading-relaxed mb-4">平庸的物理生错奇数个负号，优秀的物理生错偶数个负号。</p>
+                
+                 {/* Mobile Social Links */}
+                  <div class="flex gap-4">
+                      <a href="https://github.com/C-L1gh7" target="_blank" rel="noopener noreferrer" class="p-2 border border-black hover:bg-black hover:text-white transition-colors rounded-full inline-flex items-center justify-center">
+                          <IconGithub className="w-4 h-4"/>
+                      </a>
+                      <a href="mailto:HuanyuYuan@mail.ecust.edu.cn" class="p-2 border border-black hover:bg-black hover:text-white transition-colors rounded-full inline-flex items-center justify-center">
+                          <IconMail className="w-4 h-4"/>
+                      </a>
+                  </div>
+                  
+                  {/* Email Text for Mobile */}
+                  <div class="mt-4 font-mono text-[10px] text-gray-500 break-all select-all">
+                      HuanyuYuan@mail.ecust.edu.cn
+                  </div>
+            </div>
+
+            {/* Right Content: Post List */}
+            <main class="lg:col-span-8 space-y-8">
+                <div class="flex items-end justify-between border-b-2 border-black pb-4 mb-8">
+                    <h1 class="text-2xl font-black uppercase tracking-tight">Latest Posts</h1>
+                    <span class="font-mono text-xs font-bold bg-yellow-400 px-2 py-1 border border-black transform -rotate-2 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                        PAGE 1/1
+                    </span>
+                </div>
+
+                {posts.length > 0 ? (
+                    <PostList client:load posts={posts} />
+                ) : (
+                    <p class="text-gray-500 font-mono text-sm">No posts found.</p>
+                )}
+
+                {/* Pagination */}
+                <div class="pt-12 flex justify-between items-center">
+                    <button class="px-6 py-2 border border-black font-mono text-xs font-bold hover:bg-black hover:text-white transition-colors disabled:opacity-50" disabled>
+                        &lt; PREV
+                    </button>
+                    <button class="px-6 py-2 border border-black font-mono text-xs font-bold hover:bg-black hover:text-white transition-colors disabled:opacity-50" disabled>
+                        NEXT &gt;
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
 </BaseLayout>

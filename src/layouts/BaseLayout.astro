@@ -1,177 +1,67 @@
 ---
-export interface Props {
-  title: string;
-  description?: string;
-  image?: string;
+interface Props {
+	title: string;
 }
 
-const { title, description = 'A terminal-inspired Astro theme', image } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
+const { title } = Astro.props;
 ---
 
-<!DOCTYPE html>
-<html lang="zh">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
-    <link rel="alternate icon" type="image/x-icon" href={`${base}favicon.ico`} />
-    <meta name="generator" content={Astro.generator} />
-
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
-    
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
-    {image && <meta property="og:image" content={new URL(image, Astro.url)} />}
-    
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    {image && <meta name="twitter:image" content={new URL(image, Astro.url)} />}
-    
-    <link rel="sitemap" href={`${base}sitemap-index.xml`} />
-    <link rel="alternate" type="application/rss+xml" title="RSS" href={`${base}rss.xml`} />
-
-    <!-- 添加 KaTeX 数学公式样式 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
-
-  </head>
-  <body>
-    <div class="container center">
-      <header class="header">
-        <div class="header__inner">
-          <div class="header__logo">
-            <a href={base}>
-              <div class="logo">
-                C_L1gh7
-              </div>
-            </a>
-          </div>
-          <ul class="menu menu--mobile">
-            <li class="menu__trigger">Menu ▾</li>
-            <li>
-              <ul class="menu__dropdown">
-                <li><a href={`${base}`}>首页</a></li>
-                <li><a href={`${base}posts/`}>文章</a></li>
-                <li><a href={`${base}tags/`}>标签</a></li>
-                <li><a href={`${base}about/`}>关于</a></li>
-              </ul>
-            </li>
-          </ul>
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+	</head>
+	<body class="font-sans bg-[#f0f0ed] text-[#1a1a1a] min-h-screen selection:bg-[#f2c94c] selection:text-black pb-20">
+        {/* Noise Texture */}
+        <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
+             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3%3E")` }}></div>
+		
+        <div class="relative z-10 flex flex-col min-h-screen">
+            <slot />
         </div>
-        
-        <nav class="navigation-menu">
-          <ul class="navigation-menu__inner menu--desktop">
-            <li><a href={`${base}`}>首页</a></li>
-            <li><a href={`${base}posts/`}>文章</a></li>
-            <li>
-              <ul class="menu">
-                <li class="menu__trigger">查看更多 ▾</li>
-                <li>
-                  <ul class="menu__dropdown">
-                    <li><a href={`${base}tags/`}>标签</a></li>
-                    <li><a href={`${base}about/`}>关于</a></li>
-
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
-      </header>
-      
-      <main class="content">
-        <slot />
-      </main>
-      
-      <footer class="footer">
-        <div class="footer__inner">
-          <div class="copyright">
-            <span>© 2025 C_L1gh7's blog</span>
-            <span class="separator">::</span>
-            <span>Powered by <a href="https://astro.build" target="_blank">Astro</a> </span>
-            <span class="separator">::</span>
-            <span>维护者：<a href="https://github.com/C-L1gh7" target="_blank">C_L1gh7</a></span>
-          </div>
-        </div>
-      </footer>
-    </div>
-    
-    <script>
-      // Menu functionality
-      (() => {
-        const container = document.querySelector(".container");
-        const menus = document.querySelectorAll(".menu");
-        
-        // Close menus when clicking outside
-        document.body.addEventListener("click", () => {
-          menus.forEach(menu => {
-            if (menu.classList.contains("open")) {
-              menu.classList.remove("open");
-            }
-          });
-        });
-        
-        // Close menus on window resize
-        window.addEventListener("resize", () => {
-          menus.forEach(menu => {
-            menu.classList.remove("open");
-          });
-        });
-        
-        // Menu trigger functionality
-        menus.forEach(menu => {
-          const trigger = menu.querySelector(".menu__trigger");
-          const dropdown = menu.querySelector(".menu__dropdown");
-          
-          if (trigger && dropdown) {
-            trigger.addEventListener("click", event => {
-              event.stopPropagation();
-              
-              if (menu.classList.contains("open")) {
-                menu.classList.remove("open");
-              } else {
-                // Close other menus
-                menus.forEach(m => m.classList.remove("open"));
-                menu.classList.add("open");
-              }
-              
-              // Adjust dropdown position if it goes outside container
-              if (
-                container &&
-                dropdown.getBoundingClientRect().right > container.getBoundingClientRect().right
-              ) {
-                (dropdown as HTMLElement).style.left = "auto";
-                (dropdown as HTMLElement).style.right = "0";
-              }
-            });
-            
-            dropdown.addEventListener("click", e => e.stopPropagation());
-          }
-        });
-      })();
-    </script>
-  </body>
+	</body>
 </html>
-
 <style is:global>
-  /* Import all CSS files in the correct order */
-  @import "../styles/terminal.css";
-  @import "../styles/fonts.css";
-  @import "../styles/main.css";
-  @import "../styles/header.css";
-  @import "../styles/menu.css";
-  @import "../styles/footer.css";
-  @import "../styles/buttons.css";
-  @import "../styles/post.css";
-  @import "../styles/pagination.css";
-  @import "../styles/code.css";
-  @import "../styles/syntax.css";
-  @import "../styles/gist.css";
-  @import "../styles/terms.css";
+    :root {
+        --font-inter: 'Inter', sans-serif;
+        --font-jetbrains-mono: 'JetBrains Mono', monospace;
+    }
+    .font-mono {
+        font-family: var(--font-jetbrains-mono);
+    }
+    .font-sans {
+        font-family: var(--font-inter);
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #999;
+    }
+
+    .content-container {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
 </style>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar';
+import NoteCard from '../components/NoteCard.astro';
+import { getCollection } from 'astro:content';
+
+const notes = await getCollection('notes');
+const sortedNotes = notes.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+const title = "Personal Notes";
+---
+
+<BaseLayout title={title}>
+    <Navbar client:load />
+
+    <div class="content-container pt-28 pb-20">
+      <div class="flex items-end justify-between border-b-2 border-black pb-4 mb-12">
+            <h1 class="text-4xl font-black uppercase tracking-tight">Notes</h1>
+            <span class="font-mono text-xs font-bold">DIGITAL GARDEN</span>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-max">
+        {sortedNotes.length > 0 ? (
+            sortedNotes.map((note) => (
+                <NoteCard note={note} />
+            ))
+        ) : (
+            <p class="text-gray-500 font-mono text-sm col-span-full">No notes found.</p>
+        )}
+      </div>
+    </div>
+</BaseLayout>

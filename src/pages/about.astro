@@ -1,24 +1,76 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar';
+
+const title = "About Me";
 ---
 
-<BaseLayout title="关于">
-  <div class="page">
-    <h1>关于</h1>
-    <p>
-      这个网页是由袁焕予(C_L1gh7)创建的个人博客网站，使用Astro框架构建。
-    </p>
-    
-    <p>
-      目前还没有什么东西，整体网页还在维护中，还请大家多多包涵。
-    </p>
-    
-  </div>
-</BaseLayout>
+<BaseLayout title={title}>
+    <Navbar client:load />
 
-<style>
-  .page {
-    max-width: 760px;
-    margin: 0 auto;
-  }
-</style>
+    <div class="content-container pt-28 pb-20">
+      <h1 class="text-4xl font-black uppercase tracking-tight mb-8 border-b-2 border-black pb-4">About Me</h1>
+      
+      <div class="prose prose-lg prose-invert font-serif leading-relaxed max-w-none">
+        
+        {/* Intro */}
+        <section class="mb-12">
+            <h2 class="text-2xl font-black uppercase tracking-tight mb-6">👋 你好! 我是 袁焕予 / C_L1gh7</h2>
+            <p class="text-xl">
+                <span class="font-bold bg-yellow-200 px-1 border border-black transform -rotate-1 inline-block shadow-[2px_2px_0px_#000]">光电信息科学与工程</span> 本科在读。
+            </p>
+        </section>
+
+        {/* Blog Content */}
+        <section class="mb-12 bg-white border-2 border-black p-8 shadow-[8px_8px_0px_#ccc]">
+            <h3 class="font-black font-mono text-lg mb-6 flex items-center gap-2 border-b border-black pb-2 w-full">
+                <span class="text-2xl">💡</span> 这里是我的个人博客：
+            </h3>
+            <ul class="space-y-4 list-none pl-0 font-bold">
+                <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                    <span class="w-8 h-8 flex items-center justify-center border border-black rounded-full bg-gray-100 text-xl">🧪</span> 
+                    <span>科研历程和项目介绍</span>
+                </li>
+                <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                    <span class="w-8 h-8 flex items-center justify-center border border-black rounded-full bg-gray-100 text-xl">📖</span>
+                    <span>学习笔记以及技术分享</span>
+                </li>
+                <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                    <span class="w-8 h-8 flex items-center justify-center border border-black rounded-full bg-gray-100 text-xl">💭</span>
+                    <span>个人随笔和闲聊</span>
+                </li>
+            </ul>
+        </section>
+
+        {/* Tech Stack */}
+        <section>
+             <h3 class="font-black font-mono text-lg mb-8 flex items-center gap-2 border-b border-black pb-2 w-full">
+                <span class="text-2xl">⚙️</span> 我的技术栈：
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-sm">
+                <div class="border border-black p-4 bg-gray-50 hover:bg-white hover:shadow-[4px_4px_0px_#000] transition-all hover:-translate-y-1">
+                    <div class="font-black mb-3 flex items-center gap-2 uppercase tracking-wide"><span class="text-xl">💻</span> 编程语言</div>
+                    <div class="text-gray-600 font-bold">Python, C</div>
+                </div>
+                
+                <div class="border border-black p-4 bg-gray-50 hover:bg-white hover:shadow-[4px_4px_0px_#000] transition-all hover:-translate-y-1">
+                    <div class="font-black mb-3 flex items-center gap-2 uppercase tracking-wide"><span class="text-xl">📊</span> 数据处理</div>
+                    <div class="text-gray-600 font-bold">OpenCV, NumPy, Matplotlib</div>
+                </div>
+
+                <div class="border border-black p-4 bg-gray-50 hover:bg-white hover:shadow-[4px_4px_0px_#000] transition-all hover:-translate-y-1">
+                    <div class="font-black mb-3 flex items-center gap-2 uppercase tracking-wide"><span class="text-xl">🛠️</span> 仿真 & 建模</div>
+                    <div class="text-gray-600 font-bold">COMSOL, CAD, Blender</div>
+                </div>
+
+                <div class="border border-black p-4 bg-gray-50 hover:bg-white hover:shadow-[4px_4px_0px_#000] transition-all hover:-translate-y-1">
+                    <div class="font-black mb-3 flex items-center gap-2 uppercase tracking-wide"><span class="text-xl">🌐</span> 工具与平台</div>
+                    <div class="text-gray-600 font-bold">Git, LaTeX, GitHub</div>
+                </div>
+            </div>
+        </section>
+
+      </div>
+    </div>
+</BaseLayout>
