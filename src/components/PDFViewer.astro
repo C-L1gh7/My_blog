@@ -1,0 +1,22 @@
+---
+interface Props {
+  src: string;
+  height?: string;
+}
+
+const { src, height = "600px" } = Astro.props;
+---
+
+<div class="pdf-container" style="margin: 20px 0; border: 2px solid #000; box-shadow: 6px 6px 0px #000;">
+  <iframe 
+    src={src} 
+    width="100%" 
+    height={height} 
+    style="border: none;"
+  ></iframe>
+  <div style="text-align: center; padding: 10px; font-family: monospace; font-size: 12px; background: #f0f0ed; border-top: 1px solid #000;">
+    <a href={src} target="_blank" style="color: #dc2626; font-weight: bold; text-decoration: underline;">
+      DOWNLOAD PDF
+    </a>
+  </div>
+</div>
