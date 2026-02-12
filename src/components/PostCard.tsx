@@ -58,7 +58,7 @@ const PostCard = ({ post }: { post: PostProps }) => {
     };
 
     return (
-    <a href={`${baseUrl}/posts/${post.slug}/`} className="block relative">
+    <a href={`${baseUrl}/posts/${post.slug}`} className="block relative">
         <motion.article 
             layout
             variants={cardVariants}
