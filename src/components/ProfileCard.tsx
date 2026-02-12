@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconGithub, IconTwitter, IconMail } from './Icons';
+import { IconGithub, IconBilibili, IconMail } from './Icons';
 
 const ProfileCard = () => (
     <div className="bg-white border-2 border-black p-6 shadow-[6px_6px_0px_#ccc] sticky top-24">
@@ -22,7 +22,7 @@ const ProfileCard = () => (
         {/* Social Links */}
         <div className="flex gap-4 mb-8">
             <a href="https://github.com/C-L1gh7" target="_blank" rel="noopener noreferrer" className="p-2 border border-black hover:bg-black hover:text-white transition-colors rounded-full"><IconGithub className="w-4 h-4"/></a>
-            <a href="#" className="p-2 border border-black hover:bg-black hover:text-white transition-colors rounded-full"><IconTwitter className="w-4 h-4"/></a>
+            <a href="https://space.bilibili.com/286704463" target="_blank" rel="noopener noreferrer" className="p-2 border border-black hover:bg-black hover:text-white transition-colors rounded-full"><IconBilibili className="w-4 h-4"/></a>
             <a href="mailto:HuanyuYuan@mail.ecust.edu.cn" className="p-2 border border-black hover:bg-black hover:text-white transition-colors rounded-full"><IconMail className="w-4 h-4"/></a>
         </div>
 
