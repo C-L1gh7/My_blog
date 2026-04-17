@@ -12,6 +12,24 @@ export interface ProjectProps {
     videoUrl?: string;
 }
 
+const renderDescription = (text: string) => {
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    const items = lines.filter(l => l.startsWith('* ') || l.startsWith('- '));
+    if (items.length > 0) {
+        return (
+            <ul className="list-none space-y-1">
+                {items.map((item, i) => (
+                    <li key={i} className="flex gap-2 text-sm text-gray-600 leading-relaxed">
+                        <span className="text-black font-bold shrink-0">—</span>
+                        <span>{item.replace(/^[*-]\s+/, '')}</span>
+                    </li>
+                ))}
+            </ul>
+        );
+    }
+    return <p className="text-sm text-gray-600 leading-relaxed">{text}</p>;
+};
+
 const ProjectCard = ({ project }: { project: ProjectProps }) => {
     const hasLinks = project.codeUrl || project.docsUrl || project.videoUrl;
 
@@ -36,7 +54,7 @@ const ProjectCard = ({ project }: { project: ProjectProps }) => {
 
                 <h3 className="text-xl font-bold mb-2 leading-tight">{project.title}</h3>
 
-                <p className="text-sm text-gray-600 leading-relaxed mb-4">{project.description}</p>
+                <div className="mb-4">{renderDescription(project.description)}</div>
 
                 <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.map((tech) => (
@@ -47,22 +65,22 @@ const ProjectCard = ({ project }: { project: ProjectProps }) => {
                 </div>
 
                 {hasLinks && (
-                    <div className="mt-auto flex items-center gap-3">
+                    <div className="mt-auto flex items-center gap-2 pt-3 border-t border-black/10">
                         {project.codeUrl && (
                             <a href={project.codeUrl} target="_blank" rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-[10px] font-mono font-bold uppercase hover:bg-red-600 transition-colors cursor-pointer">
+                                className="flex items-center gap-1.5 px-3 py-1 border border-black text-[10px] font-mono font-bold uppercase hover:bg-black hover:text-white transition-colors cursor-pointer">
                                 <IconCode className="w-3 h-3" /> Code
                             </a>
                         )}
                         {project.docsUrl && (
                             <a href={project.docsUrl} target="_blank" rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 px-3 py-1.5 border border-black text-[10px] font-mono font-bold uppercase hover:bg-black hover:text-white transition-colors cursor-pointer">
+                                className="flex items-center gap-1.5 px-3 py-1 border border-black text-[10px] font-mono font-bold uppercase hover:bg-black hover:text-white transition-colors cursor-pointer">
                                 <IconFileText className="w-3 h-3" /> Docs
                             </a>
                         )}
                         {project.videoUrl && (
                             <a href={project.videoUrl} target="_blank" rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 px-3 py-1.5 border border-black text-[10px] font-mono font-bold uppercase hover:bg-black hover:text-white transition-colors cursor-pointer">
+                                className="flex items-center gap-1.5 px-3 py-1 border border-black text-[10px] font-mono font-bold uppercase hover:bg-black hover:text-white transition-colors cursor-pointer">
                                 <IconVideo className="w-3 h-3" /> Video
                             </a>
                         )}

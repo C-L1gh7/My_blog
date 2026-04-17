@@ -6,7 +6,10 @@
       "Bash(python scripts/search.py \"portfolio project showcase retro minimal\" --design-system -p \"My Blog Projects\")",
       "Bash(python src/ui-ux-pro-max/scripts/search.py \"portfolio project showcase retro minimal\" --design-system -p \"My Blog Projects\")",
       "Bash(npx astro *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Read(//c/Users/m1381/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.5.0/**)",
+      "Bash(python src/ui-ux-pro-max/scripts/search.py \"portfolio project card buttons retro minimal\" --domain style -n 3)",
+      "Bash(python src/ui-ux-pro-max/scripts/search.py \"button consistency icon label sizing\" --domain ux -n 3)"
     ]
   }
 }
