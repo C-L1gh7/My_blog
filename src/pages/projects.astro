@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar';
+import ProjectCard from '../components/ProjectCard';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+const sortedProjects = projects.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+const title = "Projects";
+---
+
+<BaseLayout title={title}>
+    <Navbar client:load />
+
+    <div class="content-container pt-28 pb-20">
+      <div class="flex items-end justify-between border-b-2 border-black pb-4 mb-12">
+            <h1 class="text-4xl font-black uppercase tracking-tight">Projects</h1>
+            <span class="font-mono text-xs font-bold">SHOWCASE</span>
+      </div>
+
+      <div class="flex flex-col gap-6">
+        {sortedProjects.length > 0 ? (
+            sortedProjects.map((project) => (
+                <ProjectCard client:load project={{
+                    title: project.data.title,
+                    description: project.data.description,
+                    date: project.data.date,
+                    image: project.data.image,
+                    technologies: project.data.technologies,
+                    codeUrl: project.data.codeUrl,
+                    docsUrl: project.data.docsUrl,
+                    videoUrl: project.data.videoUrl,
+                }} />
+            ))
+        ) : (
+            <p class="text-gray-500 font-mono text-sm col-span-full">No projects yet. Stay tuned!</p>
+        )}
+      </div>
+    </div>
+</BaseLayout>

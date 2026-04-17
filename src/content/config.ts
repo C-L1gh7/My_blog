@@ -31,4 +31,18 @@ const studies = defineCollection({
   }),
 });
 
-export const collections = { posts, notes, studies };
+const projects = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.string(),
+    image: z.string().optional(),
+    technologies: z.array(z.string()),
+    codeUrl: z.string().optional(),
+    docsUrl: z.string().optional(),
+    videoUrl: z.string().optional(),
+  }),
+});
+
+export const collections = { posts, notes, studies, projects };
