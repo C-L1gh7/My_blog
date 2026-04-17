@@ -8,7 +8,7 @@ const Navbar = () => {
     const baseUrl = import.meta.env.BASE_URL;
 
     return (
-        <nav className="fixed top-0 left-0 w-full z-50 bg-[#f0f0ed]/90 backdrop-blur-sm border-b border-black/10">
+        <nav className="fixed top-0 left-0 w-full z-[100] bg-[#f0f0ed]/90 backdrop-blur-sm border-b border-black/10">
             <div className="content-container h-16 flex items-center justify-between">
                 <a href={baseUrl} className="flex items-center gap-2 group">
                     <IconDisc className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
