@@ -7,17 +7,27 @@ import { IconGithub, IconMail } from '../components/Icons';
 import { getCollection, render } from 'astro:content';
 
 const allPosts = await getCollection('posts');
-const latestPosts = allPosts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+const latestPosts = sortedPosts
     .slice(0, 2)
     .map(post => ({...post.data, id: post.id, slug: post.slug}));
 
 const allProjects = await getCollection('projects');
+const sortedProjects = allProjects.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 const latestProjects = await Promise.all(
-    allProjects
-        .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+    sortedProjects
         .slice(0, 2)
         .map(async (p) => ({ entry: p, rendered: await render(p) }))
 );
+
+const allNotes = await getCollection('notes');
+const sortedNotes = allNotes.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+const timeline = [
+    ...sortedPosts.slice(0, 3).map(p => ({ type: 'post' as const, title: p.data.title, date: p.data.date, slug: p.slug })),
+    ...sortedProjects.slice(0, 2).map(p => ({ type: 'project' as const, title: p.data.title, date: p.data.date })),
+    ...sortedNotes.slice(0, 2).map(n => ({ type: 'note' as const, title: n.data.title, date: n.data.date })),
+].sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf()).slice(0, 6);
 
 const title = "C_L1gh7 - 个人博客";
 const baseUrl = import.meta.env.BASE_URL;
@@ -30,7 +40,7 @@ const baseUrl = import.meta.env.BASE_URL;
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
             <aside class="lg:col-span-4 hidden lg:block h-full">
-                <ProfileCard />
+                <ProfileCard timeline={timeline} client:load />
             </aside>
 
             <div class="lg:hidden col-span-1 mb-8">
