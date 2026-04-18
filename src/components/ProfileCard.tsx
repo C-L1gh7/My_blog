@@ -78,9 +78,9 @@ const ProfileCard = ({ timeline = [] }: ProfileCardProps) => {
     const baseUrl = import.meta.env.BASE_URL;
 
     const getHref = (item: TimelineItem) => {
-        if (item.type === 'post' && item.slug) return `${baseUrl}/posts/${item.slug}`;
-        if (item.type === 'project') return `${baseUrl}/projects`;
-        if (item.type === 'note') return `${baseUrl}/notes`;
+        if (item.type === 'post' && item.slug) return `${baseUrl}posts/${item.slug}`;
+        if (item.type === 'project') return `${baseUrl}projects`;
+        if (item.type === 'note') return `${baseUrl}notes`;
         return '#';
     };
 

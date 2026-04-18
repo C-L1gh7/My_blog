@@ -7,7 +7,7 @@ import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
   site: 'https://cl1gh7.pages.dev/',
-  base: '',
+  base: '/',
   integrations: [react(), tailwind(), mdx()],
   markdown: {
     remarkPlugins: [remarkMath],

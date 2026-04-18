@@ -11,7 +11,9 @@
       "Bash(python src/ui-ux-pro-max/scripts/search.py \"portfolio project card buttons retro minimal\" --domain style -n 3)",
       "Bash(python src/ui-ux-pro-max/scripts/search.py \"button consistency icon label sizing\" --domain ux -n 3)",
       "Bash(npx tsc *)",
-      "Bash(xargs grep *)"
+      "Bash(xargs grep *)",
+      "WebSearch",
+      "WebFetch(domain:docs.astro.build)"
     ]
   }
 }
