@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { IconArrowRight } from './Icons';
 
@@ -64,7 +64,8 @@ const PostCard = ({ post }: { post: PostProps }) => {
             animate={isHovered ? "hover" : "idle"}
             onHoverStart={() => setIsHovered(true)}
             onHoverEnd={() => setIsHovered(false)}
-            className={`group border flex flex-col sm:flex-row gap-4 sm:gap-6 overflow-hidden sm:overflow-visible relative cursor-pointer active:scale-[0.98] transition-transform
+            whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
+            className={`group border flex flex-col sm:flex-row gap-4 sm:gap-6 overflow-hidden sm:overflow-visible relative cursor-pointer
                 ${hasImage ? 'p-0 sm:p-5' : 'p-5'}
             `}
             style={{ backdropFilter: isHovered ? "blur(4px)" : "none" }}
