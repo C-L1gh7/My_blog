@@ -105,7 +105,7 @@ const PostHub: React.FC<PostHubProps> = ({ initialPosts }) => {
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <button
                             onClick={clearFilters}
-                            className={`px-3 py-1.5 sm:py-1 border text-[11px] sm:text-[10px] font-bold uppercase tracking-wider transition-all ${!selectedTag && !isRandomMode ? 'bg-black text-white border-black' : 'border-transparent text-gray-500 hover:border-black hover:text-black active:bg-gray-100'}`}
+                            className={`px-3 py-1.5 sm:py-1 border border-black text-[11px] sm:text-[10px] font-bold uppercase tracking-wider transition-all active:scale-95 ${!selectedTag && !isRandomMode ? 'bg-black text-white' : 'bg-white text-gray-500 hover:bg-gray-100 hover:text-black'}`}
                         >
                             ALL
                         </button>
