@@ -54,79 +54,83 @@ const PostHub: React.FC<PostHubProps> = ({ initialPosts }) => {
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
             {/* Control Panel */}
-            <div className="bg-white border-2 border-black p-6 shadow-[4px_4px_0px_#ccc] space-y-4">
-                <div className="flex flex-col md:flex-row gap-4">
+            <div className="bg-white border-2 border-black p-4 sm:p-6 shadow-[4px_4px_0px_#ccc] space-y-4">
+                <div className="flex flex-col md:flex-row gap-3 sm:gap-4">
                     {/* Search */}
                     <div className="flex-1 relative">
                         <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                        <input 
-                            type="text" 
-                            placeholder="Search posts..." 
+                        <input
+                            type="text"
+                            placeholder="Search posts..."
                             value={searchTerm}
                             onChange={(e) => {
                                 setSearchTerm(e.target.value);
                                 setIsRandomMode(false);
                             }}
-                            className="w-full pl-10 pr-4 py-2 border border-black focus:outline-none focus:ring-2 focus:ring-black font-mono text-sm"
+                            className="w-full pl-10 pr-4 py-2.5 sm:py-2 border border-black focus:outline-none focus:ring-2 focus:ring-black font-mono text-sm"
                         />
                     </div>
 
-                    {/* Sort */}
-                    <button 
-                        onClick={() => {
-                            setSortOrder(prev => prev === 'newest' ? 'oldest' : 'newest');
-                            setIsRandomMode(false);
-                        }}
-                        className="flex items-center gap-2 px-4 py-2 border border-black hover:bg-black hover:text-white transition-colors font-mono text-xs font-bold uppercase"
-                    >
-                        <IconSort className="w-4 h-4" />
-                        {sortOrder === 'newest' ? 'Newest' : 'Oldest'}
-                    </button>
-                    
-                     {/* Random */}
-                    <button 
-                        onClick={handleRandomPick}
-                        className="flex items-center gap-2 px-4 py-2 border border-black hover:bg-black hover:text-white active:scale-95 transition-all font-mono text-xs font-bold uppercase"
-                    >
-                        <IconShuffle className="w-4 h-4" />
-                        Surprise Me
-                    </button>
-                </div>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 items-center pt-2 border-t border-dashed border-gray-300">
-                    <span className="font-mono text-xs font-bold mr-2 text-gray-500 flex items-center gap-1">
-                        <IconFilter className="w-3 h-3" /> FILTERS:
-                    </span>
-                    <button 
-                        onClick={clearFilters}
-                        className={`px-3 py-1 border text-[10px] font-bold uppercase tracking-wider transition-all ${!selectedTag && !isRandomMode ? 'bg-black text-white border-black' : 'border-transparent text-gray-500 hover:border-black hover:text-black'}`}
-                    >
-                        ALL
-                    </button>
-                    {allTags.map(tag => (
+                    {/* Sort & Random — side by side on mobile */}
+                    <div className="flex gap-2 sm:gap-3">
                         <button
-                            key={tag}
                             onClick={() => {
-                                setSelectedTag(tag === selectedTag ? null : tag);
+                                setSortOrder(prev => prev === 'newest' ? 'oldest' : 'newest');
                                 setIsRandomMode(false);
                             }}
-                            className={`px-3 py-1 border border-black text-[10px] font-bold uppercase tracking-wider transition-all ${selectedTag === tag ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-gray-100'}`}
+                            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 border border-black hover:bg-black hover:text-white active:scale-95 transition-all font-mono text-xs font-bold uppercase"
                         >
-                            {tag}
+                            <IconSort className="w-4 h-4" />
+                            {sortOrder === 'newest' ? 'Newest' : 'Oldest'}
                         </button>
-                    ))}
+
+                        <button
+                            onClick={handleRandomPick}
+                            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 border border-black hover:bg-black hover:text-white active:scale-95 transition-all font-mono text-xs font-bold uppercase"
+                        >
+                            <IconShuffle className="w-4 h-4" />
+                            <span className="hidden sm:inline">Surprise Me</span>
+                            <span className="sm:hidden">Random</span>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Tags — horizontally scrollable on mobile */}
+                <div className="flex items-start gap-2 pt-3 border-t border-dashed border-gray-300">
+                    <span className="font-mono text-xs font-bold text-gray-500 flex items-center gap-1 shrink-0 pt-1">
+                        <IconFilter className="w-3 h-3" /> FILTERS:
+                    </span>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <button
+                            onClick={clearFilters}
+                            className={`px-3 py-1.5 sm:py-1 border text-[11px] sm:text-[10px] font-bold uppercase tracking-wider transition-all ${!selectedTag && !isRandomMode ? 'bg-black text-white border-black' : 'border-transparent text-gray-500 hover:border-black hover:text-black active:bg-gray-100'}`}
+                        >
+                            ALL
+                        </button>
+                        {allTags.map(tag => (
+                            <button
+                                key={tag}
+                                onClick={() => {
+                                    setSelectedTag(tag === selectedTag ? null : tag);
+                                    setIsRandomMode(false);
+                                }}
+                                className={`px-3 py-1.5 sm:py-1 border border-black text-[11px] sm:text-[10px] font-bold uppercase tracking-wider transition-all active:scale-95 ${selectedTag === tag ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-gray-100'}`}
+                            >
+                                {tag}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
             {/* Results Header */}
             <div className="flex items-end justify-between border-b-2 border-black pb-4">
-                <h2 className="text-2xl font-black uppercase tracking-tight">
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight">
                     {isRandomMode ? 'Random Picks' : (selectedTag ? `${selectedTag} Posts` : 'All Posts')}
                 </h2>
-                <span className="font-mono text-xs font-bold bg-yellow-400 px-2 py-1 border border-black transform -rotate-2 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                <span className="font-mono text-xs font-bold bg-yellow-400 px-2 py-1 border border-black transform -rotate-2 shadow-[2px_2px_0px_rgba(0,0,0,1)] shrink-0 ml-3">
                     COUNT: {filteredPosts.length}
                 </span>
             </div>

@@ -36,7 +36,7 @@ const ProjectCard = ({ project }: { project: ProjectProps }) => {
     return (
         <article className="bg-white border border-black/10 flex flex-col sm:flex-row overflow-hidden">
             {project.image && (
-                <div className="sm:w-52 h-48 sm:h-auto bg-gray-200 shrink-0 border-b sm:border-b-0 sm:border-r border-black/10 overflow-hidden">
+                <div className="sm:w-52 h-40 sm:h-auto bg-gray-200 shrink-0 border-b sm:border-b-0 sm:border-r border-black/10 overflow-hidden">
                     <img
                         src={project.image}
                         alt={project.title}
@@ -52,7 +52,7 @@ const ProjectCard = ({ project }: { project: ProjectProps }) => {
                     <span className="uppercase tracking-wider text-red-600">PROJECT</span>
                 </div>
 
-                <h3 className="text-xl font-bold mb-2 leading-tight">{project.title}</h3>
+                <h3 className="text-lg sm:text-xl font-bold mb-2 leading-tight">{project.title}</h3>
 
                 <div className="mb-4">{renderDescription(project.description)}</div>
 
@@ -65,23 +65,23 @@ const ProjectCard = ({ project }: { project: ProjectProps }) => {
                 </div>
 
                 {hasLinks && (
-                    <div className="mt-auto flex items-center gap-2 pt-3 border-t border-black/10">
+                    <div className="mt-auto flex flex-wrap items-center gap-2 pt-3 border-t border-black/10">
                         {project.codeUrl && (
                             <a href={project.codeUrl} target="_blank" rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 px-3 py-1 border border-black text-[10px] font-mono font-bold uppercase hover:bg-black hover:text-white transition-colors cursor-pointer">
-                                <IconCode className="w-3 h-3" /> Code
+                                className="flex items-center gap-1.5 px-4 py-2 border border-black text-xs font-mono font-bold uppercase hover:bg-black hover:text-white active:scale-95 transition-all cursor-pointer">
+                                <IconCode className="w-3.5 h-3.5" /> Code
                             </a>
                         )}
                         {project.docsUrl && (
                             <a href={project.docsUrl} target="_blank" rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 px-3 py-1 border border-black text-[10px] font-mono font-bold uppercase hover:bg-black hover:text-white transition-colors cursor-pointer">
-                                <IconFileText className="w-3 h-3" /> Docs
+                                className="flex items-center gap-1.5 px-4 py-2 border border-black text-xs font-mono font-bold uppercase hover:bg-black hover:text-white active:scale-95 transition-all cursor-pointer">
+                                <IconFileText className="w-3.5 h-3.5" /> Docs
                             </a>
                         )}
                         {project.videoUrl && (
                             <a href={project.videoUrl} target="_blank" rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 px-3 py-1 border border-black text-[10px] font-mono font-bold uppercase hover:bg-black hover:text-white transition-colors cursor-pointer">
-                                <IconVideo className="w-3 h-3" /> Video
+                                className="flex items-center gap-1.5 px-4 py-2 border border-black text-xs font-mono font-bold uppercase hover:bg-black hover:text-white active:scale-95 transition-all cursor-pointer">
+                                <IconVideo className="w-3.5 h-3.5" /> Video
                             </a>
                         )}
                     </div>
