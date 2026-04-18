@@ -7,11 +7,12 @@ interface Props {
 const { src, height = "600px" } = Astro.props;
 ---
 
-<div class="pdf-container" style="margin: 20px 0; border: 2px solid #000; box-shadow: 6px 6px 0px #000;">
-  <iframe 
-    src={src} 
-    width="100%" 
-    height={height} 
+<!-- Desktop: iframe with retro border -->
+<div class="hidden sm:block pdf-container" style="margin: 20px 0; border: 2px solid #000; box-shadow: 6px 6px 0px #000;">
+  <iframe
+    src={src}
+    width="100%"
+    height={height}
     style="border: none;"
   ></iframe>
   <div style="text-align: center; padding: 10px; font-family: monospace; font-size: 12px; background: #f0f0ed; border-top: 1px solid #000;">
@@ -19,4 +20,12 @@ const { src, height = "600px" } = Astro.props;
       DOWNLOAD PDF
     </a>
   </div>
+</div>
+
+<!-- Mobile: direct download prompt -->
+<div class="sm:hidden text-center py-12 border border-black/10 bg-white">
+  <p class="font-mono text-sm text-gray-500 mb-4">PDF 在移动端建议直接下载查看</p>
+  <a href={src} target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-black text-white text-xs font-mono font-bold uppercase hover:bg-red-600 active:scale-95 transition-all">
+    ↓ DOWNLOAD PDF
+  </a>
 </div>

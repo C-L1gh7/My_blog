@@ -22,15 +22,15 @@ const baseUrl = import.meta.env.BASE_URL;
     <Navbar client:load />
 
     <div class="content-container pt-28 pb-20">
-      <div class="flex items-end justify-between border-b-2 border-black pb-4 mb-12">
-            <h1 class="text-4xl font-black uppercase tracking-tight">Studies</h1>
+      <div class="flex items-end justify-between border-b-2 border-black pb-4 mb-8 md:mb-12">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight">Studies</h1>
             <span class="font-mono text-xs font-bold">KNOWLEDGE BASE</span>
       </div>
-      
-      <div class="space-y-12">
+
+      <div class="space-y-8 md:space-y-12">
         {Object.keys(groupedStudies).length > 0 ? (
             Object.entries(groupedStudies).map(([course, courseStudies]) => (
-                <div class="bg-white border-2 border-black p-6 md:p-8 shadow-[8px_8px_0px_#1a1a1a]">
+                <div class="bg-white border md:border-2 border-black/10 md:border-black p-4 sm:p-6 md:p-8 md:shadow-[8px_8px_0px_#1a1a1a]">
                     <h2 class="text-2xl font-black uppercase tracking-tight mb-6 flex items-center gap-3">
                         <span class="w-4 h-4 bg-black"></span>
                         {course}

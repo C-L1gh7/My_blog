@@ -36,18 +36,18 @@ const { Content } = await study.render();
         }
       </script>
 
-      <div class="bg-white border-2 border-black p-6 md:p-12 shadow-[8px_8px_0px_#ccc]">
-          <article class="prose prose-lg prose-invert max-w-none mx-auto">
-            <header class="mb-12 border-b-2 border-black pb-8">
+      <div class="bg-white md:border-2 md:border-black p-4 sm:p-6 md:p-12 md:shadow-[8px_8px_0px_#ccc]">
+          <article class="prose prose-sm sm:prose-base md:prose-lg max-w-none mx-auto">
+            <header class="mb-8 md:mb-12 border-b-2 border-black pb-6 md:pb-8">
                 <div class="flex items-center gap-3 font-mono text-xs font-bold text-gray-500 mb-4">
                     <span class="text-black">{study.data.course}</span>
                     <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
                     <span class="uppercase tracking-wider text-red-600">{study.data.date}</span>
                 </div>
-                <h1 class="text-3xl md:text-4xl font-black uppercase tracking-tight mb-6 leading-tight">{study.data.title}</h1>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight mb-6 leading-tight">{study.data.title}</h1>
             </header>
 
-            <div class="font-serif leading-relaxed text-lg text-gray-800">
+            <div class="font-serif leading-relaxed text-base md:text-lg text-gray-800">
                 <Content />
             </div>
           </article>

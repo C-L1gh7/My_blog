@@ -48,16 +48,25 @@ export default {
                             backgroundColor: '#f3f4f6',
                             padding: '0.2em 0.4em',
                             borderRadius: '0.25rem',
+                            fontSize: '0.875em',
+                            wordBreak: 'break-word',
                         },
                         'code::before': { content: '""' },
                         'code::after': { content: '""' },
+                        pre: {
+                            overflowX: 'auto',
+                            fontSize: '0.8125em',
+                        },
+                        'pre code': {
+                            wordBreak: 'normal',
+                        },
                         blockquote: {
                             borderLeftColor: '#000000',
                             borderLeftWidth: '4px',
                             color: '#52525b',
                             fontStyle: 'italic',
                             backgroundColor: '#f4f4f5',
-                            padding: '1em',
+                            padding: '0.75em',
                         },
                         'ul > li::marker': {
                             color: '#000000',

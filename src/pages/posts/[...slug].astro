@@ -36,27 +36,27 @@ const { Content } = await post.render();
         }
       </script>
 
-      <div class="bg-white border-2 border-black p-6 md:p-12 shadow-[8px_8px_0px_#ccc]">
-          <article class="prose prose-lg prose-invert max-w-none mx-auto">
-            <header class="mb-12 border-b-2 border-black pb-8">
+      <div class="bg-white md:border-2 md:border-black p-4 sm:p-6 md:p-12 md:shadow-[8px_8px_0px_#ccc]">
+          <article class="prose prose-sm sm:prose-base md:prose-lg max-w-none mx-auto">
+            <header class="mb-8 md:mb-12 border-b-2 border-black pb-6 md:pb-8">
                 <div class="flex items-center gap-3 font-mono text-xs font-bold text-gray-500 mb-4">
                     <span class="text-black">{post.data.date}</span>
                     <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
                     <span class="uppercase tracking-wider text-red-600">{post.data.tag || 'GENERAL'}</span>
                 </div>
-                <h1 class="text-3xl md:text-5xl font-black uppercase tracking-tight mb-6 leading-tight">{post.data.title}</h1>
+                <h1 class="text-2xl sm:text-3xl md:text-5xl font-black uppercase tracking-tight mb-6 leading-tight">{post.data.title}</h1>
                 {post.data.image && (
-                    <div class="w-full bg-gray-100 mt-8 border-2 border-black overflow-hidden relative flex justify-center items-center">
-                        <img 
-                            src={post.data.image} 
-                            alt={post.data.title} 
+                    <div class="w-full bg-gray-100 mt-6 md:mt-8 border-2 border-black overflow-hidden relative flex justify-center items-center">
+                        <img
+                            src={post.data.image}
+                            alt={post.data.title}
                             class="max-w-full h-auto max-h-[600px] object-contain"
                         />
                     </div>
                 )}
             </header>
 
-            <div class="font-serif leading-relaxed text-lg text-gray-800">
+            <div class="font-serif leading-relaxed text-base md:text-lg text-gray-800">
                 <Content />
             </div>
           </article>

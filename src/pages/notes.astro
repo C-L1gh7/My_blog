@@ -14,12 +14,12 @@ const title = "Personal Notes";
     <Navbar client:load />
 
     <div class="content-container pt-28 pb-20">
-      <div class="flex items-end justify-between border-b-2 border-black pb-4 mb-12">
-            <h1 class="text-4xl font-black uppercase tracking-tight">Notes</h1>
+      <div class="flex items-end justify-between border-b-2 border-black pb-4 mb-8 md:mb-12">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight">Notes</h1>
             <span class="font-mono text-xs font-bold">DIGITAL GARDEN</span>
       </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-max">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 auto-rows-max">
         {sortedNotes.length > 0 ? (
             sortedNotes.map((note) => (
                 <NoteCard note={note} />
