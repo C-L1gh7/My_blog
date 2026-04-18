@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { IconArrowRight } from './Icons';
 
@@ -16,6 +16,14 @@ export interface PostProps {
 const isTouchDevice = () =>
     typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
 
+/**
+ * Lightweight cross-card coordination via a custom DOM event.
+ * When card A activates, it fires "postcard:activate" with its slug.
+ * Every other card listens and deactivates itself.
+ * No parent-component changes needed.
+ */
+const ACTIVATE_EVENT = 'postcard:activate';
+
 const PostCard = ({ post }: { post: PostProps }) => {
     if (!post.slug) {
         console.error('PostCard: missing slug for post', post);
@@ -25,26 +33,44 @@ const PostCard = ({ post }: { post: PostProps }) => {
     const hasImage = !!post.image;
     const [isActive, setIsActive] = useState(false);
     const [isTouch, setIsTouch] = useState(false);
+    const slugRef = useRef(post.slug);
     const baseUrl = import.meta.env.BASE_URL;
 
     useEffect(() => { setIsTouch(isTouchDevice()); }, []);
 
-    // On touch devices: tap toggles the "active" highlight; second tap follows the link.
-    // On pointer devices: hover drives the highlight as before.
+    // Listen for other cards activating → deactivate this one
+    useEffect(() => {
+        const handler = (e: Event) => {
+            const activated = (e as CustomEvent<string>).detail;
+            if (activated !== slugRef.current) {
+                setIsActive(false);
+            }
+        };
+        window.addEventListener(ACTIVATE_EVENT, handler);
+        return () => window.removeEventListener(ACTIVATE_EVENT, handler);
+    }, []);
+
+    const activate = useCallback(() => {
+        setIsActive(true);
+        window.dispatchEvent(new CustomEvent(ACTIVATE_EVENT, { detail: post.slug }));
+    }, [post.slug]);
+
+    // On touch devices: first tap → preview; second tap → navigate.
+    // On pointer devices: let <a> navigate normally.
     const handleTap = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-        if (!isTouch) return;           // pointer devices — let <a> navigate normally
+        if (!isTouch) return;
         if (!isActive) {
-            e.preventDefault();         // first tap: show preview, don't navigate
-            setIsActive(true);
+            e.preventDefault();
+            activate();
         }
         // second tap: isActive is already true → default <a> navigation fires
-    }, [isTouch, isActive]);
+    }, [isTouch, isActive, activate]);
 
     const cardVariants = {
         active: {
             backgroundColor: "rgba(255, 255, 255, 0.95)",
             borderColor: "#000000",
-            scale: isTouch ? 1 : 1.02,  // no scale jump on mobile — avoids layout shift
+            scale: isTouch ? 1 : 1.02,
             boxShadow: isTouch
                 ? "6px 6px 0px rgba(26, 26, 26, 1)"
                 : "12px 12px 0px rgba(26, 26, 26, 1)",
