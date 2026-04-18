@@ -10,7 +10,8 @@
       "Read(//c/Users/m1381/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.5.0/**)",
       "Bash(python src/ui-ux-pro-max/scripts/search.py \"portfolio project card buttons retro minimal\" --domain style -n 3)",
       "Bash(python src/ui-ux-pro-max/scripts/search.py \"button consistency icon label sizing\" --domain ux -n 3)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(xargs grep *)"
     ]
   }
 }
