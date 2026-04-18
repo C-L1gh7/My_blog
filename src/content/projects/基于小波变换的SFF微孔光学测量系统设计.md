@@ -4,7 +4,7 @@ date: "2025-08-21"
 
 technologies: ["Python", "OpenCV", "NumPy", "STM32", "Matlab"]
 codeUrl: "https://github.com/C-L1gh7/micro-hole-measurement.git"
-docsUrl: "/My_blog/docs/基于小波变换的SFF微孔光学测量系统设计.pdf"
+docsUrl: "/docs/基于小波变换的SFF微孔光学测量系统设计.pdf"
 videoUrl: "https://www.bilibili.com/video/BV1CugwznEwc"
 ---
 
