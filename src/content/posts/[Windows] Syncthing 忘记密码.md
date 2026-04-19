@@ -4,7 +4,6 @@ date: '2025-11-07'
 tag: '技术分享'
 excerpt: '本文介绍了在 Windows 系统中通过修改 config.xml 配置文件删除认证信息，从而重置 Syncthing Web 界面密码的方法。'
 ---
-# [Windows] Syncthing 忘记密码的解决方法
 
 ## 通过修改配置文件重置密码
 
