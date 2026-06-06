@@ -69,8 +69,6 @@ const { Content } = await post.render();
   .img-zoom-overlay {
     position: fixed;
     inset: 0;
-    width: 100dvw;
-    height: 100dvh;
     z-index: 9999;
     background: rgba(255, 255, 255, 0.55);
     backdrop-filter: blur(18px);
@@ -171,10 +169,17 @@ const { Content } = await post.render();
        ================================================================ */
     const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
 
-    /** Reliable viewport dimensions — visualViewport accounts for mobile
-        address bar, on-screen keyboard etc. */
-    function vpW() { return window.visualViewport?.width  ?? window.innerWidth; }
-    function vpH() { return window.visualViewport?.height ?? window.innerHeight; }
+    /** Layout-viewport dimensions (matches position:fixed overlay).
+        visualViewport gets us the visible area dimensions on mobile. */
+    function vpW() { return window.visualViewport?.width  ?? document.documentElement.clientWidth; }
+    function vpH() { return window.visualViewport?.height ?? document.documentElement.clientHeight; }
+    /** Offset of the visual viewport within the layout viewport
+        (e.g. address bar pushes the visual area down on mobile). */
+    function vpOffX() { return window.visualViewport?.offsetLeft ?? 0; }
+    function vpOffY() { return window.visualViewport?.offsetTop  ?? 0; }
+    /** Convert event clientX/Y (visual-viewport coords) to overlay coords */
+    function toOverlayX(cx) { return cx + vpOffX(); }
+    function toOverlayY(cy) { return cy + vpOffY(); }
 
     /** Total CSS scale = baseScale * zoom */
     function totalScale() { return baseScale * zoom; }
@@ -300,7 +305,7 @@ const { Content } = await post.render();
       if (zoom === oldZoom) return;
 
       // Keep the point under the cursor pinned
-      const cx = e.clientX, cy = e.clientY;
+      const cx = toOverlayX(e.clientX), cy = toOverlayY(e.clientY);
       const oldLeft = imgLeft(), oldTop = imgTop();
       panX = cx - (cx - oldLeft) * (zoom / oldZoom) - (vpW()  - nw * totalScale()) / 2;
       panY = cy - (cy - oldTop)  * (zoom / oldZoom) - (vpH() - nh * totalScale()) / 2;
@@ -358,7 +363,7 @@ const { Content } = await post.render();
 
       const oldZoom = zoom;
       zoom = DBLCLICK_ZOOM;
-      const cx = e.clientX, cy = e.clientY;
+      const cx = toOverlayX(e.clientX), cy = toOverlayY(e.clientY);
       const oldLeft = imgLeft(), oldTop = imgTop();
       panX = cx - (cx - oldLeft) * (zoom / oldZoom) - (vpW()  - nw * totalScale()) / 2;
       panY = cy - (cy - oldTop)  * (zoom / oldZoom) - (vpH() - nh * totalScale()) / 2;
@@ -372,29 +377,27 @@ const { Content } = await post.render();
     /* ================================================================
        Touch: single-finger pan + two-finger pinch
        ================================================================ */
-    let touches0 = null;        // Touch[] for the current gesture
-    let pinchDist0 = 0;        // starting finger distance
-    let pinchZoom0 = 1;        // zoom at pinch start
-    let pinchCX = 0, pinchCY = 0;  // midpoint of pinch at start
-    let panTX = 0, panTY = 0;  // pan at gesture start
+    let touches0 = null;
+    let pinchDist0 = 0;
+    let pinchZoom0 = 1;
+    let pinchCX = 0, pinchCY = 0;    // midpoint at pinch start (overlay coords)
+    let pinchPanX = 0, pinchPanY = 0; // pan at pinch start
 
     stage.addEventListener('touchstart', (e) => {
       if (!overlay.classList.contains('active')) return;
       if (e.touches.length === 1) {
-        // single finger → pan (only when zoomed in)
         if (!isOverflowing()) return;
         touches0 = [e.touches[0]];
-        panTX = panX; panTY = panY;
+        pinchPanX = panX; pinchPanY = panY;
         e.preventDefault();
       } else if (e.touches.length === 2) {
-        // pinch
         const [t0, t1] = [e.touches[0], e.touches[1]];
         touches0 = [t0, t1];
         pinchDist0 = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
         pinchZoom0 = zoom;
-        pinchCX = (t0.clientX + t1.clientX) / 2;
-        pinchCY = (t0.clientY + t1.clientY) / 2;
-        panTX = panX; panTY = panY;
+        pinchCX = (toOverlayX(t0.clientX) + toOverlayX(t1.clientX)) / 2;
+        pinchCY = (toOverlayY(t0.clientY) + toOverlayY(t1.clientY)) / 2;
+        pinchPanX = panX; pinchPanY = panY;
         e.preventDefault();
       }
     }, { passive: false });
@@ -402,36 +405,35 @@ const { Content } = await post.render();
     stage.addEventListener('touchmove', (e) => {
       if (!touches0) return;
       if (touches0.length === 1 && e.touches.length === 1) {
-        // pan
         const dx = e.touches[0].clientX - touches0[0].clientX;
         const dy = e.touches[0].clientY - touches0[0].clientY;
         if (Math.abs(dx) > 3 || Math.abs(dy) > 3) justDragged = true;
-        panX = panTX + dx;
-        panY = panTY + dy;
+        panX = pinchPanX + dx;
+        panY = pinchPanY + dy;
         clampPan();
         applyTransform(false);
         e.preventDefault();
       } else if (touches0.length === 2 && e.touches.length === 2) {
         const [t0, t1] = [e.touches[0], e.touches[1]];
         const dist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
-        const cx   = (t0.clientX + t1.clientX) / 2;
-        const cy   = (t0.clientY + t1.clientY) / 2;
+        const cx   = (toOverlayX(t0.clientX) + toOverlayX(t1.clientX)) / 2;
+        const cy   = (toOverlayY(t0.clientY) + toOverlayY(t1.clientY)) / 2;
 
         const oldZoom = zoom;
         zoom = clamp(pinchZoom0 * (dist / pinchDist0), MIN_ZOOM, MAX_ZOOM);
         if (Math.abs(zoom - oldZoom) > 0.005) justDragged = true;
 
-        // zoom toward moving midpoint
-        const oldLeft = (vpW()  - nw * baseScale * oldZoom)  / 2 + panTX;
-        const oldTop  = (vpH() - nh * baseScale * oldZoom) / 2 + panTY;
-        // position at start of gesture, adjusted for zoom change & midpoint drift
-        const newLeft = cx - (cx - oldLeft) * (zoom / oldZoom)
-                        - (cx - pinchCX) * (zoom / pinchZoom0);
-        const newTop  = cy - (cy - oldTop)  * (zoom / oldZoom)
-                        - (cy - pinchCY) * (zoom / pinchZoom0);
+        // Image-space fraction under starting pinch midpoint
+        const ts0 = baseScale * pinchZoom0;
+        const oldLeft0 = (vpW() - nw * ts0) / 2 + pinchPanX;
+        const oldTop0  = (vpH() - nh * ts0) / 2 + pinchPanY;
+        const fx = (pinchCX - oldLeft0) / (nw * ts0);
+        const fy = (pinchCY - oldTop0)  / (nh * ts0);
 
-        panX = newLeft - (vpW()  - nw * totalScale()) / 2;
-        panY = newTop  - (vpH() - nh * totalScale()) / 2;
+        // Reposition so same image point follows current midpoint
+        const newTs = baseScale * zoom;
+        panX = cx - fx * nw * newTs - (vpW() - nw * newTs) / 2;
+        panY = cy - fy * nh * newTs - (vpH() - nh * newTs) / 2;
 
         clampPan();
         applyTransform(false);
