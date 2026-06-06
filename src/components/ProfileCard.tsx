@@ -95,7 +95,7 @@ const ProfileCard = ({ timeline = [] }: ProfileCardProps) => {
                 />
             </div>
 
-            <h2 className="text-xl font-black uppercase tracking-tight mb-2">C_L1gh7</h2>
+            <h2 className="font-mono text-xl font-black uppercase tracking-tight mb-2">C_L1gh7</h2>
             <p className="text-sm text-gray-600 mb-6 leading-relaxed">
                 光电信息科学与工程本科在读。
                 <br />

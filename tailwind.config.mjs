@@ -5,7 +5,7 @@ export default {
         extend: {
             fontFamily: {
                 mono: ['JetBrains Mono', 'monospace'],
-                sans: ['Inter', 'sans-serif'],
+                sans: ['Inter', 'Noto Sans SC', 'sans-serif'],
             },
             colors: {
                 background: "#f0f0ed",
@@ -17,17 +17,17 @@ export default {
                         color: '#1a1a1a',
                         h1: {
                             color: '#000000',
-                            fontWeight: '900',
+                            fontWeight: '700',
                             textTransform: 'uppercase',
                         },
                         h2: {
                             color: '#000000',
-                            fontWeight: '800',
+                            fontWeight: '700',
                             marginTop: '2em',
                         },
                         h3: {
                             color: '#000000',
-                            fontWeight: '700',
+                            fontWeight: '600',
                         },
                         strong: {
                             color: '#000000',

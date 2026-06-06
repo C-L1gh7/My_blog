@@ -46,7 +46,7 @@ const Navbar = () => {
                 <div className="content-container h-16 flex items-center justify-between">
                     <a href={baseUrl || '/'} className="flex items-center gap-2 group">
                         <IconDisc className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
-                        <span className="font-black italic tracking-tighter text-lg">C_L1gh7</span>
+                        <span className="font-mono font-black italic tracking-tighter text-lg">C_L1gh7</span>
                     </a>
 
                     {/* Desktop nav */}
