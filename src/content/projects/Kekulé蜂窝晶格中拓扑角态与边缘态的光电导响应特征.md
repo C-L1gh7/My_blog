@@ -1,6 +1,7 @@
 ---
 title: "文章成果（市级大创项目）-Kekulé蜂窝晶格中拓扑角态与边界态的光电导响应特征"
 date: "2026-04-17"
+docsUrl: "https://wulixb.iphy.ac.cn/article/doi/10.7498/aps.75.20260536"
 codeUrl: "https://github.com/C-L1gh7/kekule-lattice-simulate"
 technologies: ["Python", "NumPy"]
 ---
