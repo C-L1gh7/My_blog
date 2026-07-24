@@ -15,7 +15,12 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 ---
 
-<BaseLayout title={post.data.title}>
+<BaseLayout
+    title={post.data.title + ' — C_L1gh7'}
+    description={post.data.excerpt || post.data.description || post.data.title}
+    ogImage={post.data.image}
+    ogType="article"
+>
     <Navbar client:load />
 
     <div class="content-container pt-28 pb-20">

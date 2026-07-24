@@ -15,7 +15,10 @@ const { study } = Astro.props;
 const { Content } = await study.render();
 ---
 
-<BaseLayout title={study.data.title}>
+<BaseLayout
+    title={study.data.title + ' — C_L1gh7'}
+    description={`${study.data.course} 课程笔记 — ${study.data.title}`}
+>
     <Navbar client:load />
 
     <div class="content-container pt-28 pb-20">

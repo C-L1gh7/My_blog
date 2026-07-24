@@ -1,34 +1,73 @@
 ---
 interface Props {
-	title: string;
+    title: string;
+    description?: string;
+    ogImage?: string;
+    canonicalURL?: string;
+    ogType?: string;
 }
 
-const { title } = Astro.props;
+const {
+    title,
+    description = "C_L1gh7 的个人博客 — 光电信息科学与工程 / 技术分享 / 项目记录",
+    ogImage = "https://pub-f15d478863f747a68de4bbf63631ccfe.r2.dev/PicGo/%E5%A4%B4%E5%83%8F.jpg",
+    canonicalURL,
+    ogType = "website",
+} = Astro.props;
+
+const siteName = "C_L1gh7's Blog";
+const siteUrl = "https://cl1gh7.pages.dev";
+const resolvedCanonical = canonicalURL || new URL(Astro.url.pathname, siteUrl).href;
 ---
 
 <!doctype html>
 <html lang="zh-CN">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href={import.meta.env.BASE_URL + "favicon.svg"} />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href={import.meta.env.BASE_URL + "favicon.svg"} />
+        <meta name="generator" content={Astro.generator} />
+
+        {/* ── Primary SEO ── */}
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={resolvedCanonical} />
+
+        {/* ── Open Graph (Facebook, LinkedIn, etc.) ── */}
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={resolvedCanonical} />
+        <meta property="og:type" content={ogType} />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="800" />
+        <meta property="og:image:height" content="800" />
+        <meta property="og:locale" content="zh_CN" />
+
+        {/* ── Twitter Card ── */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
+
+        {/* ── Baidu-specific ── */}
+        <meta name="baidu-site-verification" content="" />
+
+        {/* ── Fonts & CSS ── */}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700;900&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
-	</head>
-	<body class="font-sans bg-[#f0f0ed] text-[#1a1a1a] min-h-screen selection:bg-[#f2c94c] selection:text-black pb-20">
+    </head>
+    <body class="font-sans bg-[#f0f0ed] text-[#1a1a1a] min-h-screen selection:bg-[#f2c94c] selection:text-black pb-20">
         {/* Noise Texture */}
-        <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
-             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3%3E")` }}></div>
-		
+        <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-0"
+             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E%3E")` }}></div>
+
         <div class="relative z-10 flex flex-col min-h-screen">
             <slot />
         </div>
-	</body>
+    </body>
 </html>
 <style is:global>
     :root {
@@ -41,7 +80,7 @@ const { title } = Astro.props;
     .font-sans {
         font-family: var(--font-sans);
     }
-    
+
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
         width: 6px;

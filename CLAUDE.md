@@ -143,3 +143,20 @@ All three link fields are optional — buttons only render if URLs are provided.
 - **Smart back navigation** — Post detail page checks `document.referrer` for same-origin; uses `history.back()` if so, otherwise navigates to `/posts/`
 - **timeline merging** — `index.astro` merges latest posts, projects, and notes into a single sorted timeline for ProfileCard
 - **Unused dependency** — `lucide-react` is in `package.json` but not imported anywhere in `src/`; all icons come from the custom `Icons.tsx` SVG library
+
+## SEO 规范
+
+**所有页面必须设置 description meta 标签。** `BaseLayout.astro` 已支持 `description` prop，新建页面时使用：
+
+```astro
+<BaseLayout
+    title="页面标题"
+    description="页面描述"
+>
+```
+
+- 列表页、关于页、CV 页等：在页面 `.astro` 文件中硬编码 description
+- 文章详情页：description 取 `post.data.excerpt`，因此每篇文章的 frontmatter 中应填写 `excerpt` 字段
+- 学习笔记详情页：description 使用 `${study.data.course} 课程笔记 — ${study.data.title}`
+
+**新建任何页面时，必须提醒用户提供 description。**

@@ -14,7 +14,10 @@ const posts = allPosts.map(post => ({
 const title = "Post Archive";
 ---
 
-<BaseLayout title={title}>
+<BaseLayout
+    title={title}
+    description="袁焕予(C_L1gh7) 的全部文章"
+>
     <Navbar client:load />
 
     <div class="content-container pt-28 pb-20">
