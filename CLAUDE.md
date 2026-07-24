@@ -160,3 +160,34 @@ All three link fields are optional — buttons only render if URLs are provided.
 - 学习笔记详情页：description 使用 `${study.data.course} 课程笔记 — ${study.data.title}`
 
 **新建任何页面时，必须提醒用户提供 description。**
+
+### 站点地图配置
+
+**CRITICAL**: 站点地图必须包含完整的 SEO 元数据才能被 Google 正常抓取。`astro.config.mjs` 中的 `@astrojs/sitemap` 配置已优化，包含：
+
+- **`lastmod`** — 最后修改时间（构建时间戳）
+- **`changefreq`** — 更新频率（daily/weekly/monthly）
+- **`priority`** — 页面优先级（0.0-1.0）
+
+**当前优先级策略**（在 `serialize` 函数中定义）：
+- 首页：`1.0`（每日更新）
+- 项目页：`0.9`（每月更新）
+- 文章页：`0.8`（每周更新）
+- 学习笔记页：`0.7`（每月更新）
+- Notes 页：`0.6`（每周更新）
+- 其他页面：`0.7`（每周更新，默认值）
+
+**修改站点地图配置时**：
+1. 保持 `serialize` 函数中的 URL 模式匹配逻辑
+2. 根据内容类型调整 `priority` 和 `changefreq`
+3. 修改后必须运行 `npm run build` 重新生成站点地图
+4. 部署后在 Google Search Console 重新提交站点地图（或等待 24-48 小时自动抓取）
+
+**验证站点地图**：
+```bash
+# 本地验证 XML 格式
+xmllint --format dist/sitemap-0.xml | head -50
+
+# 检查线上站点地图
+curl -s https://cl1gh7.pages.dev/sitemap-index.xml | xmllint --format -
+```
