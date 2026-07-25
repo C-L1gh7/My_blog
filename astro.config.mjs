@@ -7,7 +7,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
-  site: 'https://cl1gh7.pages.dev/',
+  site: 'https://www.cl1gh7.top/',
   base: '/',
   integrations: [
     react(),
@@ -19,7 +19,7 @@ export default defineConfig({
       lastmod: new Date(),
       serialize(item) {
         // 为不同类型的页面设置不同的优先级和更新频率
-        if (item.url === 'https://cl1gh7.pages.dev/') {
+        if (item.url === 'https://www.cl1gh7.top/') {
           item.priority = 1.0;
           item.changefreq = 'daily';
         } else if (item.url.includes('/posts/')) {
