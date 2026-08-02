@@ -16,7 +16,7 @@ const {
 } = Astro.props;
 
 const siteName = "C_L1gh7's Blog";
-const siteUrl = "https://cl1gh7.pages.dev";
+const siteUrl = Astro.site?.origin || "https://www.cl1gh7.top";
 const resolvedCanonical = canonicalURL || new URL(Astro.url.pathname, siteUrl).href;
 ---
 
