@@ -1,0 +1,2 @@
+# 将不带 www 的域名重定向到带 www 的版本
+https://cl1gh7.top/* https://www.cl1gh7.top/:splat 301!
