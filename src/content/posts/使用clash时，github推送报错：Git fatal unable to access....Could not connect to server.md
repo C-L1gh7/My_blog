@@ -4,8 +4,6 @@ date: '2025-11-08'
 tag: '技术分享'
 excerpt: '本文介绍了使用clash时github推送报错的解决方法'
 ---
-# 使用clash时，github推送报错：Git: fatal: unable to access....Could not connect to server
-
 ## 原因分析
 
 Git 设置了 HTTP(S) 代理，但代理程序没开 / 端口错了
