@@ -142,8 +142,6 @@ All three link fields are optional — buttons only render if URLs are provided.
 - **Base URL handling** — All internal links use `${import.meta.env.BASE_URL}/path` pattern
 - **Smart back navigation** — Post detail page checks `document.referrer` for same-origin; uses `history.back()` if so, otherwise navigates to `/posts/`
 - **timeline merging** — `index.astro` merges latest posts, projects, and notes into a single sorted timeline for ProfileCard
-- **Unused dependency** — `lucide-react` is in `package.json` but not imported anywhere in `src/`; all icons come from the custom `Icons.tsx` SVG library
-
 ## SEO 规范
 
 **所有页面必须设置 description meta 标签。** `BaseLayout.astro` 已支持 `description` prop，新建页面时使用：

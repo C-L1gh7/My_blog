@@ -8,8 +8,6 @@ const allProjects = await Promise.all(
     projects
         .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
         .map(async (p) => {
-            const { Content } = await render(p);
-            // render to static HTML string via a temporary approach
             return {
                 title: p.data.title,
                 description: p.data.description ?? '',
