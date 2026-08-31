@@ -79,7 +79,7 @@ const postJsonLd = {
                 )}
             </header>
 
-            <div class="font-sans leading-relaxed text-base md:text-lg text-gray-800">
+            <div class="post-body font-sans leading-relaxed text-base md:text-lg text-gray-800">
                 <Content />
             </div>
           </article>
@@ -152,6 +152,18 @@ const postJsonLd = {
 
   .img-zoom-badge.visible {
     opacity: 1;
+  }
+
+  .post-body :where(p) {
+    text-indent: 2em;
+  }
+
+  .post-body :where(li p, blockquote p, table p) {
+    text-indent: 0;
+  }
+
+  .post-body :where(p:has(img), p:has(video), p:has(iframe)) {
+    text-indent: 0;
   }
 </style>
 
