@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title>C_L1gh7 logo option 1</title>
+  <desc>A bold square logo with a single letter C for C_L1gh7.</desc>
+  <rect width="512" height="512" rx="112" fill="#f0f0ed"/>
+  <rect x="54" y="54" width="404" height="404" rx="86" fill="#101010"/>
+  <path d="M367 353c-30 28-67 42-112 42-79 0-134-56-134-139 0-84 55-139 134-139 45 0 82 14 112 42l-53 51c-16-17-34-26-56-26-39 0-65 29-65 72s26 72 65 72c22 0 40-9 56-26l53 51Z" fill="#f0f0ed"/>
+  <path d="M382 130h26v252h-26z" fill="#C71F2D"/>
+</svg>

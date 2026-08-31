@@ -5,19 +5,86 @@ interface Props {
     ogImage?: string;
     canonicalURL?: string;
     ogType?: string;
+    jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
+const defaultOgImage = "https://pub-f15d478863f747a68de4bbf63631ccfe.r2.dev/PicGo/%E5%A4%B4%E5%83%8F.jpg";
 const {
     title,
     description = "C_L1gh7 的个人博客 — 光电信息科学与工程 / 技术分享 / 项目记录",
-    ogImage = "https://pub-f15d478863f747a68de4bbf63631ccfe.r2.dev/PicGo/%E5%A4%B4%E5%83%8F.jpg",
+    ogImage = defaultOgImage,
     canonicalURL,
     ogType = "website",
+    jsonLd,
 } = Astro.props;
 
 const siteName = "C_L1gh7's Blog";
 const siteUrl = Astro.site?.origin || "https://www.cl1gh7.top";
+const siteRoot = siteUrl.endsWith("/") ? siteUrl : `${siteUrl}/`;
 const resolvedCanonical = canonicalURL || new URL(Astro.url.pathname, siteUrl).href;
+const resolvedOgImage = new URL(ogImage, siteRoot).href;
+const faviconPath = import.meta.env.BASE_URL + "favicon.svg";
+const logoUrl = new URL("logo.svg", siteRoot).href;
+const defaultImageUrl = new URL(defaultOgImage, siteRoot).href;
+const baseJsonLd = [
+    {
+        "@type": "Organization",
+        "@id": `${siteRoot}#organization`,
+        name: siteName,
+        url: siteRoot,
+        logo: {
+            "@type": "ImageObject",
+            url: logoUrl,
+            width: 512,
+            height: 512,
+        },
+        sameAs: [
+            "https://github.com/C-L1gh7",
+            "https://space.bilibili.com/286704463",
+        ],
+    },
+    {
+        "@type": "Person",
+        "@id": `${siteRoot}#person`,
+        name: "袁焕予",
+        alternateName: "C_L1gh7",
+        url: siteRoot,
+        image: defaultImageUrl,
+        sameAs: [
+            "https://github.com/C-L1gh7",
+            "https://space.bilibili.com/286704463",
+        ],
+    },
+    {
+        "@type": "WebSite",
+        "@id": `${siteRoot}#website`,
+        name: siteName,
+        alternateName: "C_L1gh7",
+        url: siteRoot,
+        inLanguage: "zh-CN",
+        publisher: { "@id": `${siteRoot}#organization` },
+    },
+    {
+        "@type": "WebPage",
+        "@id": `${resolvedCanonical}#webpage`,
+        url: resolvedCanonical,
+        name: title,
+        description,
+        inLanguage: "zh-CN",
+        isPartOf: { "@id": `${siteRoot}#website` },
+        about: { "@id": `${siteRoot}#person` },
+        image: resolvedOgImage,
+        primaryImageOfPage: {
+            "@type": "ImageObject",
+            url: resolvedOgImage,
+        },
+    },
+];
+const extraJsonLd = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
+const jsonLdScript = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [...baseJsonLd, ...extraJsonLd],
+}).replace(/</g, "\\u003c");
 ---
 
 <!doctype html>
@@ -25,7 +92,8 @@ const resolvedCanonical = canonicalURL || new URL(Astro.url.pathname, siteUrl).h
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href={import.meta.env.BASE_URL + "favicon.svg"} />
+        <link rel="icon" type="image/svg+xml" href={faviconPath} />
+        <link rel="shortcut icon" href={faviconPath} />
         <meta name="generator" content={Astro.generator} />
 
         {/* ── Primary SEO ── */}
@@ -39,7 +107,7 @@ const resolvedCanonical = canonicalURL || new URL(Astro.url.pathname, siteUrl).h
         <meta property="og:url" content={resolvedCanonical} />
         <meta property="og:type" content={ogType} />
         <meta property="og:site_name" content={siteName} />
-        <meta property="og:image" content={ogImage} />
+        <meta property="og:image" content={resolvedOgImage} />
         <meta property="og:image:width" content="800" />
         <meta property="og:image:height" content="800" />
         <meta property="og:locale" content="zh_CN" />
@@ -48,10 +116,14 @@ const resolvedCanonical = canonicalURL || new URL(Astro.url.pathname, siteUrl).h
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={ogImage} />
+        <meta name="twitter:image" content={resolvedOgImage} />
 
-        {/* ── Baidu-specific ── */}
-        <meta name="baidu-site-verification" content="" />
+        {/* ── Search preview images ── */}
+        <meta name="image" content={resolvedOgImage} />
+        <meta itemprop="image" content={resolvedOgImage} />
+        <link rel="image_src" href={resolvedOgImage} />
+
+        <script type="application/ld+json" set:html={jsonLdScript} />
 
         {/* ── Fonts & CSS ── */}
         <link rel="preconnect" href="https://fonts.googleapis.com">
