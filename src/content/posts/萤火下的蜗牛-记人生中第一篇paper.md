@@ -1,14 +1,14 @@
 ---
 
-title: '萤火下的蜗牛'
+title: '萤火下的蜗牛-记人生中第一篇paper'
 
-date: '2026-07-13'
+date: '2026-06-12'
 
 tag: '日常生活'
 
-excerpt: '援引Blender创始人的一句话。这次赛题比我想象中的难的多，甚至到了不可能完成的程度。不过，如果我当初知道有这么难的话，我可能甚至没有勇气开始。'
+excerpt: '发表了人生中第一篇论文，十分激动。研究过程中足有所获，遂写文留念'
 
-image: 'https://img.cl1gh7.top/PicGo/光电赛光路图.png'
+image: 'https://img.cl1gh7.top/PicGo/萤火下的蜗牛1.jpg'
 
 ---
 
