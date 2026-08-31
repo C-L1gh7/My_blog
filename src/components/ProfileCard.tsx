@@ -89,7 +89,7 @@ const ProfileCard = ({ timeline = [] }: ProfileCardProps) => {
             {/* Avatar */}
             <div className="w-20 h-20 bg-[#1a1a1a] rounded-full mb-6 overflow-hidden border-2 border-black relative group">
                 <img
-                    src="https://pub-f15d478863f747a68de4bbf63631ccfe.r2.dev/PicGo/%E5%A4%B4%E5%83%8F.jpg"
+                    src="https://img.cl1gh7.top/PicGo/%E5%A4%B4%E5%83%8F.jpg"
                     alt="Avatar"
                     className="w-full h-full object-cover transition-all duration-500 group-hover:brightness-110"
                 />

@@ -34,7 +34,7 @@ items.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).val
 
 ### Asset Strategy
 
-**All images are hosted on Cloudflare R2 CDN**, not locally. Pattern: `https://pub-f15d478863f747a68de4bbf631ccfe.r2.dev/PicGo/[filename]`
+**All images are hosted on Cloudflare R2 CDN**, not locally. Pattern: `https://img.cl1gh7.top/PicGo/[filename]`
 
 - No image optimization or processing at build time
 - Components use standard `<img>` tags with CDN URLs as strings
@@ -107,7 +107,7 @@ title: "Post Title"
 date: "2024-01-01"
 tag: "CATEGORY"  # optional, defaults to 'GENERAL'
 excerpt: "Brief summary"
-image: "https://pub-f15d478863f747a68de4bbf631ccfe.r2.dev/PicGo/image.jpg"  # optional
+image: "https://img.cl1gh7.top/PicGo/image.jpg"  # optional
 ---
 
 Markdown content here. LaTeX math $E = mc^2$ is supported.
