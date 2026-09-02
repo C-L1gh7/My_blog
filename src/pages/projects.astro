@@ -42,7 +42,7 @@ const title = "Projects";
                 const entry = projects.find(p => p.id === project.slug)!;
                 const { Content } = await render(entry);
                 return (
-                    <article class="bg-white border border-black/10 flex flex-col sm:flex-row overflow-hidden">
+                    <article class="project-card bg-white border border-black/10 flex flex-col sm:flex-row overflow-hidden" data-project-card>
                         {project.image && (
                             <div class="sm:w-52 h-40 sm:h-auto bg-gray-200 shrink-0 border-b sm:border-b-0 sm:border-r border-black/10 overflow-hidden">
                                 <img src={project.image} alt={project.title} class="w-full h-full object-cover" />
@@ -55,7 +55,7 @@ const title = "Projects";
                                 <span class="uppercase tracking-wider text-red-600">PROJECT</span>
                             </div>
                             <h3 class="text-lg sm:text-xl font-bold mb-3 leading-tight">{project.title}</h3>
-                            <div class="prose prose-sm prose-p:my-1 prose-li:my-0.5 prose-ul:my-1 max-w-none text-gray-600 mb-4">
+                            <div class="project-content prose prose-sm prose-p:my-1 prose-li:my-0.5 prose-ul:my-1 max-w-none text-gray-600 mb-4">
                                 <Content />
                             </div>
                             <div class="flex flex-wrap items-center gap-2 mb-4">
@@ -95,3 +95,78 @@ const title = "Projects";
         </div>
     </div>
 </BaseLayout>
+
+<style>
+    .project-card {
+        --project-rx: 0deg;
+        --project-ry: 0deg;
+        position: relative;
+        transform: perspective(1200px) rotateX(var(--project-rx)) rotateY(var(--project-ry));
+        transform-style: preserve-3d;
+        transition: transform 180ms ease-out, border-color 200ms ease;
+    }
+
+    .project-card::before {
+        position: absolute;
+        z-index: 2;
+        top: -1px;
+        right: -1px;
+        width: 5.5rem;
+        height: 0.3rem;
+        background: #dc2626;
+        content: '';
+        transform-origin: right center;
+        transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .project-card:hover,
+    .project-card:focus-within {
+        border-color: rgb(26 26 26 / 0.24);
+    }
+
+    .project-card:hover::before,
+    .project-card:focus-within::before {
+        transform: scaleX(1.08);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .project-card,
+        .project-card::before {
+            transition: none;
+        }
+    }
+</style>
+
+<script>
+    const canTiltProjects = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+        && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (canTiltProjects) {
+        document.querySelectorAll<HTMLElement>('[data-project-card]').forEach((card) => {
+            card.addEventListener('pointermove', (event) => {
+                if (card.classList.contains('is-selecting') || window.getSelection()?.toString()) return;
+
+                const bounds = card.getBoundingClientRect();
+                const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+                const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+                card.style.setProperty('--project-rx', `${(-y * 0.65).toFixed(2)}deg`);
+                card.style.setProperty('--project-ry', `${(x * 0.85).toFixed(2)}deg`);
+            });
+
+            card.addEventListener('pointerleave', () => {
+                card.style.setProperty('--project-rx', '0deg');
+                card.style.setProperty('--project-ry', '0deg');
+                card.classList.remove('is-selecting');
+            });
+
+            card.addEventListener('pointerdown', (event) => {
+                if (!(event.target as HTMLElement).closest('h3, .project-content')) return;
+                card.classList.add('is-selecting');
+                card.style.setProperty('--project-rx', '0deg');
+                card.style.setProperty('--project-ry', '0deg');
+            });
+
+            document.addEventListener('pointerup', () => card.classList.remove('is-selecting'));
+        });
+    }
+</script>
