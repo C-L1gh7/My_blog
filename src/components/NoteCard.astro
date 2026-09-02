@@ -5,29 +5,286 @@ interface Props {
 
 const { note } = Astro.props;
 const { Content } = await note.render();
+const noteDate = new Date(note.data.date);
+const formattedDate = new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}).format(noteDate);
+const receiptRef = noteDate.toISOString().slice(0, 10).replaceAll('-', '');
 ---
 
-<div class="bg-[#fffdf5] border border-black p-4 sm:p-6 shadow-[3px_3px_0px_#1a1a1a] sm:shadow-[4px_4px_0px_#1a1a1a] relative hover:-translate-y-1 transition-transform duration-200">
-    <div class="absolute -top-3 -right-3 bg-white border border-black px-2 py-1 font-mono text-[10px] font-bold uppercase transform rotate-2">
-        NOTE
+<div class="receipt-stage" data-receipt-stage>
+  <article class="receipt-paper" data-receipt>
+    <header class="receipt-header">
+      <div>
+        <p class="receipt-brand">C_L1GH7 / NOTE DEPT.</p>
+        <p class="receipt-subtitle">Field note receipt</p>
+      </div>
+      <span class="receipt-type">Note</span>
+    </header>
+
+    <div class="receipt-row receipt-meta">
+      <span>Issued</span>
+      <time datetime={noteDate.toISOString()}>{formattedDate}</time>
     </div>
 
-    <div class="flex items-center gap-2 sm:gap-3 font-mono text-[10px] text-gray-400 mb-3 sm:mb-4">
-        <span class="text-black font-bold">{note.data.date}</span>
-        {note.data.tags && note.data.tags.map((tag: string) => (
-             <span class="text-gray-500">#{tag}</span>
-        ))}
-    </div>
+    <section class="receipt-section">
+      <p class="receipt-label">Subject</p>
+      <h2>{note.data.title}</h2>
+    </section>
 
-    <h3 class="text-base sm:text-lg font-bold mb-3 sm:mb-4 font-mono leading-tight uppercase">{note.data.title}</h3>
-
-    <div class="prose prose-sm prose-p:my-2 prose-headings:my-2 mb-4 sm:mb-6 font-serif text-gray-600 leading-relaxed">
+    <section class="receipt-section receipt-memo">
+      <p class="receipt-label">Memo</p>
+      <div class="note-body prose prose-sm max-w-none prose-headings:my-2 prose-p:my-0 prose-p:leading-7">
         <Content />
-    </div>
+      </div>
+    </section>
 
-    {note.data.file && (
-        <a href={note.data.file} target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-xs font-mono font-bold hover:bg-red-600 active:scale-95 transition-all">
-            ↓ DOWNLOAD ATTACHMENT
+    <footer class="receipt-footer">
+      {note.data.tags && (
+        <div class="receipt-row">
+          <span>Category</span>
+          <span class="receipt-tags">{note.data.tags.map((tag: string) => `#${tag}`).join(' ')}</span>
+        </div>
+      )}
+
+      {note.data.file && (
+        <a href={note.data.file} target="_blank" rel="noopener noreferrer" class="receipt-row receipt-link">
+          <span>Attachment</span>
+          <span>Open file ↗</span>
         </a>
-    )}
+      )}
+
+      <div class="receipt-total">
+        <span>Status</span>
+        <strong>Filed</strong>
+      </div>
+
+      <div class="receipt-barcode" aria-hidden="true"></div>
+      <p class="receipt-reference">REF {receiptRef} · ARCHIVE COPY</p>
+    </footer>
+  </article>
 </div>
+
+<style>
+  .receipt-stage {
+    --paper: #fffdf5;
+    perspective: 900px;
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 5px 3px rgb(26 26 26 / 0.12));
+    transition: filter 280ms ease;
+  }
+
+  .receipt-stage:hover,
+  .receipt-stage:focus-within {
+    filter: drop-shadow(0 15px 10px rgb(26 26 26 / 0.18));
+  }
+
+  .receipt-paper {
+    position: relative;
+    display: flex;
+    min-height: 25rem;
+    flex-direction: column;
+    padding: 1.5rem 1.35rem 2rem;
+    border-top: 3px solid #1a1a1a;
+    background: var(--paper);
+    color: #1a1a1a;
+    transform: rotateX(var(--receipt-rx, 0deg)) rotateY(var(--receipt-ry, 0deg)) translateY(var(--receipt-lift, 0px));
+    transform-origin: center 35%;
+    transform-style: preserve-3d;
+    transition: transform 180ms ease-out, background-color 180ms ease;
+    will-change: transform;
+  }
+
+  .receipt-paper::before,
+  .receipt-paper::after {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background:
+      linear-gradient(135deg, var(--paper) 5px, transparent 0) 0 0 / 10px 8px repeat-x,
+      linear-gradient(45deg, transparent 5px, var(--paper) 0) 0 0 / 10px 8px repeat-x;
+    content: '';
+  }
+
+  .receipt-paper::before {
+    top: -8px;
+    transform: rotate(180deg);
+  }
+
+  .receipt-paper::after {
+    bottom: -8px;
+  }
+
+  .receipt-stage:hover .receipt-paper,
+  .receipt-stage:focus-within .receipt-paper {
+    --paper: #fffef9;
+    --receipt-lift: -4px;
+  }
+
+  .receipt-header,
+  .receipt-row,
+  .receipt-total {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .receipt-header {
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed rgb(26 26 26 / 0.5);
+  }
+
+  .receipt-brand,
+  .receipt-type,
+  .receipt-row,
+  .receipt-label,
+  .receipt-reference {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .receipt-subtitle {
+    margin-top: 0.15rem;
+    color: #9ca3af;
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+  }
+
+  .receipt-type,
+  .receipt-total strong {
+    color: #dc2626;
+  }
+
+  .receipt-meta {
+    padding: 0.7rem 0;
+    color: #6b7280;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .receipt-section {
+    padding: 1rem 0;
+    border-top: 1px solid rgb(26 26 26 / 0.12);
+  }
+
+  .receipt-label {
+    margin-bottom: 0.55rem;
+    color: #9ca3af;
+  }
+
+  .receipt-section h2 {
+    font-size: 1.125rem;
+    font-weight: 800;
+    line-height: 1.4;
+  }
+
+  .receipt-memo {
+    flex: 1;
+  }
+
+  .note-body {
+    color: #52525b;
+  }
+
+  .note-body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .receipt-footer {
+    padding-top: 0.9rem;
+    border-top: 1px dashed rgb(26 26 26 / 0.5);
+  }
+
+  .receipt-row {
+    padding: 0.3rem 0;
+    color: #6b7280;
+  }
+
+  .receipt-tags {
+    max-width: 70%;
+    color: #1a1a1a;
+    text-align: right;
+  }
+
+  .receipt-link {
+    color: #1a1a1a;
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+
+  .receipt-link:hover {
+    color: #dc2626;
+  }
+
+  .receipt-link:focus-visible {
+    outline: 2px solid #1a1a1a;
+    outline-offset: 3px;
+  }
+
+  .receipt-total {
+    margin-top: 0.75rem;
+    padding: 0.65rem 0;
+    border-top: 2px solid #1a1a1a;
+    border-bottom: 2px solid #1a1a1a;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .receipt-barcode {
+    width: 72%;
+    height: 2rem;
+    margin: 1rem auto 0.5rem;
+    background: repeating-linear-gradient(90deg, #1a1a1a 0 1px, transparent 1px 3px, #1a1a1a 3px 5px, transparent 5px 8px, #1a1a1a 8px 9px, transparent 9px 12px);
+  }
+
+  .receipt-reference {
+    color: #9ca3af;
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .receipt-stage,
+    .receipt-paper {
+      transition: none;
+    }
+
+    .receipt-stage:hover .receipt-paper,
+    .receipt-stage:focus-within .receipt-paper {
+      --receipt-lift: 0px;
+    }
+  }
+</style>
+
+<script>
+  const canTilt = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (canTilt) {
+    document.querySelectorAll<HTMLElement>('[data-receipt-stage]').forEach((stage) => {
+      const receipt = stage.querySelector<HTMLElement>('[data-receipt]');
+      if (!receipt) return;
+
+      stage.addEventListener('pointermove', (event) => {
+        const bounds = stage.getBoundingClientRect();
+        const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+        const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+        receipt.style.setProperty('--receipt-rx', `${(-y * 4).toFixed(2)}deg`);
+        receipt.style.setProperty('--receipt-ry', `${(x * 5).toFixed(2)}deg`);
+      });
+
+      stage.addEventListener('pointerleave', () => {
+        receipt.style.setProperty('--receipt-rx', '0deg');
+        receipt.style.setProperty('--receipt-ry', '0deg');
+      });
+    });
+  }
+</script>

@@ -9,7 +9,6 @@ const navLinks = [
     { label: 'PROJECTS', path: 'projects', color: '#B8860B' },  // dark goldenrod
     { label: 'NOTES',    path: 'notes',    color: '#5C8A2F' },  // olive green
     { label: 'STUDIES',  path: 'studies',  color: '#2E7D6F' },  // teal
-    { label: 'ABOUT',    path: 'about',    color: '#2C5F9A' },  // medium blue
     { label: 'CV',       path: 'cv',       color: '#21467A' },  // NASA deep blue
 ];
 

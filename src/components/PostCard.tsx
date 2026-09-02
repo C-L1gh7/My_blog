@@ -24,20 +24,20 @@ const PostCard = ({ post }: { post: PostProps }) => {
 
     const cardVariants = {
         hover: {
-            backgroundColor: "rgba(255, 255, 255, 0.95)",
+            backgroundColor: "rgba(255, 255, 255, 1)",
             borderColor: "#000000",
-            scale: 1.02,
-            boxShadow: "12px 12px 0px rgba(26, 26, 26, 1)",
+            y: -3,
+            boxShadow: "5px 5px 0px rgba(26, 26, 26, 0.24), 0 14px 32px rgba(26, 26, 26, 0.08)",
             zIndex: 50,
-            transition: { type: "spring", stiffness: 300, damping: 25 }
+            transition: { type: "spring", stiffness: 420, damping: 32, mass: 0.6 }
         },
         idle: {
             backgroundColor: "rgba(255, 255, 255, 1)",
             borderColor: "rgba(0, 0, 0, 0.1)",
-            scale: 1,
+            y: 0,
             boxShadow: "0px 0px 0px rgba(0,0,0,0)",
             zIndex: 50,
-            transition: { type: "spring", stiffness: 300, damping: 25 },
+            transition: { type: "spring", stiffness: 420, damping: 34, mass: 0.6 },
             transitionEnd: { zIndex: 10 }
         }
     };
@@ -68,7 +68,6 @@ const PostCard = ({ post }: { post: PostProps }) => {
             className={`group border flex flex-col sm:flex-row gap-4 sm:gap-6 overflow-hidden sm:overflow-visible relative cursor-pointer
                 ${hasImage ? 'p-0 sm:p-5' : 'p-5'}
             `}
-            style={{ backdropFilter: isHovered ? "blur(4px)" : "none" }}
         >
             {/* Post Thumbnail */}
             {hasImage && (
@@ -103,7 +102,7 @@ const PostCard = ({ post }: { post: PostProps }) => {
                 </div>
 
                 <div className="mt-auto flex items-center text-xs font-bold uppercase tracking-wider group-hover:underline decoration-2 underline-offset-4">
-                    Read Article <IconArrowRight className="w-3 h-3 ml-1" />
+                    Read Article <IconArrowRight className="w-3 h-3 ml-1 transition-transform duration-300 group-hover:translate-x-0.5" />
                 </div>
             </div>
         </motion.article>

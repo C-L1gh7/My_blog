@@ -110,6 +110,8 @@ const postJsonLd = {
   .img-zoom-stage {
     position: absolute;
     inset: 0;
+    overflow: hidden;
+    touch-action: none;
   }
 
   .img-zoom-stage img {
@@ -184,7 +186,10 @@ const postJsonLd = {
   }
 
   @media (max-width: 640px) {
-    .img-zoom-close { top: 12px; right: 12px; }
+    .img-zoom-close {
+      top: max(12px, env(safe-area-inset-top));
+      right: max(12px, env(safe-area-inset-right));
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -337,6 +342,7 @@ const postJsonLd = {
         recalcBase();
         resetView(false);
         overlay.classList.add('active');
+        onViewportChange();
         previousBodyOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
       }
@@ -438,9 +444,11 @@ const postJsonLd = {
     let pinchZoom0 = 1;
     let pinchCX = 0, pinchCY = 0;    // midpoint at pinch start (overlay coords)
     let pinchPanX = 0, pinchPanY = 0; // pan at pinch start
+    let suppressClickUntil = 0;
 
     stage.addEventListener('touchstart', (e) => {
       if (!overlay.classList.contains('active')) return;
+      justDragged = false;
       if (e.touches.length === 1) {
         if (!isOverflowing()) return;
         touches0 = [e.touches[0]];
@@ -499,17 +507,28 @@ const postJsonLd = {
       }
     }, { passive: false });
 
-    stage.addEventListener('touchend', () => {
+    function finishTouch(e) {
+      if (justDragged) suppressClickUntil = performance.now() + 400;
+
+      if (e.touches.length === 1 && isOverflowing()) {
+        touches0 = [e.touches[0]];
+        pinchPanX = panX;
+        pinchPanY = panY;
+        return;
+      }
+
       touches0 = null;
-      // Reset justDragged after a tick so it's still set when the
-      // synthetic click fires, but cleared afterwards
-      if (justDragged) setTimeout(() => { justDragged = false; }, 50);
-    });
+      justDragged = false;
+    }
+
+    stage.addEventListener('touchend', finishTouch);
+    stage.addEventListener('touchcancel', finishTouch);
 
     /* ================================================================
        Close triggers
        ================================================================ */
     overlay.addEventListener('click', (e) => {
+      if (performance.now() < suppressClickUntil) return;
       if (justDragged) { justDragged = false; return; }
       if (e.target === overlay || e.target === stage) close();
     });
@@ -525,6 +544,12 @@ const postJsonLd = {
        ================================================================ */
     function onViewportChange() {
       if (!overlay.classList.contains('active')) return;
+      stage.style.left = `${vpOffX()}px`;
+      stage.style.top = `${vpOffY()}px`;
+      stage.style.width = `${vpW()}px`;
+      stage.style.height = `${vpH()}px`;
+      stage.style.right = 'auto';
+      stage.style.bottom = 'auto';
       recalcBase();
       clampPan();
       applyTransform(false);
