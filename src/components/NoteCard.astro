@@ -373,6 +373,58 @@ const statusLabel = statusLabels[noteStatus];
     color: #1a1a1a;
   }
 
+  @media (hover: none), (pointer: coarse) {
+    .receipt-stage:not(.is-expanded) {
+      z-index: 0;
+      filter: drop-shadow(0 5px 3px rgb(26 26 26 / 0.12));
+    }
+
+    .receipt-stage:not(.is-expanded) .receipt-paper {
+      --paper: #fffdf5;
+      --receipt-lift: 0px;
+      max-height: 18rem;
+    }
+
+    .receipt-stage:not(.is-expanded) .receipt-header {
+      max-height: 1rem;
+      padding-bottom: 0;
+      border-bottom-color: transparent;
+    }
+
+    .receipt-stage:not(.is-expanded) .receipt-header > div {
+      max-width: 0;
+      opacity: 0;
+    }
+
+    .receipt-stage:not(.is-expanded) .receipt-meta {
+      max-height: 0;
+      padding: 0;
+      opacity: 0;
+    }
+
+    .receipt-stage:not(.is-expanded) .receipt-section {
+      padding: 0.75rem 0;
+      border-top-color: transparent;
+    }
+
+    .receipt-stage:not(.is-expanded) .receipt-label {
+      max-height: 0;
+      margin-bottom: 0;
+      opacity: 0;
+    }
+
+    .receipt-stage:not(.is-expanded) .note-body {
+      max-height: 8.75rem;
+    }
+
+    .receipt-stage:not(.is-expanded) .receipt-footer {
+      max-height: 0;
+      padding-top: 0;
+      opacity: 0;
+      border-top-color: transparent;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .receipt-stage,
     .receipt-paper {
@@ -440,7 +492,6 @@ const statusLabel = statusLabels[noteStatus];
       });
       stage.classList.toggle('is-expanded', shouldExpand);
       stage.setAttribute('aria-expanded', String(shouldExpand));
-      if (!shouldExpand) stage.blur();
     });
   });
 
@@ -449,7 +500,6 @@ const statusLabel = statusLabels[noteStatus];
     receiptStages.forEach((stage) => {
       stage.classList.remove('is-expanded');
       stage.setAttribute('aria-expanded', 'false');
-      stage.blur();
     });
   });
 </script>
