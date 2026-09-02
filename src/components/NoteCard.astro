@@ -440,6 +440,7 @@ const statusLabel = statusLabels[noteStatus];
       });
       stage.classList.toggle('is-expanded', shouldExpand);
       stage.setAttribute('aria-expanded', String(shouldExpand));
+      if (!shouldExpand) stage.blur();
     });
   });
 
@@ -448,6 +449,7 @@ const statusLabel = statusLabels[noteStatus];
     receiptStages.forEach((stage) => {
       stage.classList.remove('is-expanded');
       stage.setAttribute('aria-expanded', 'false');
+      stage.blur();
     });
   });
 </script>
