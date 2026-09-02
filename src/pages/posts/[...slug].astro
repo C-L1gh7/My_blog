@@ -93,9 +93,9 @@ const postJsonLd = {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    background: rgba(240, 240, 237, 0.78);
+    backdrop-filter: blur(20px) saturate(0.82);
+    -webkit-backdrop-filter: blur(20px) saturate(0.82);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.25s ease, visibility 0.25s ease;
@@ -114,9 +114,14 @@ const postJsonLd = {
 
   .img-zoom-stage img {
     position: absolute;
-    top: 0;
-    left: 0;
-    transform-origin: 0 0;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    zoom: 1 !important;
+    transform-origin: center;
     will-change: transform;
     border-radius: 4px;
     box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.05);
@@ -132,26 +137,60 @@ const postJsonLd = {
   /* ── Zoom indicator badge ── */
   .img-zoom-badge {
     position: fixed;
-    bottom: 28px;
+    bottom: max(22px, env(safe-area-inset-bottom));
     left: 50%;
     transform: translateX(-50%);
     z-index: 10002;
-    background: rgba(0, 0, 0, 0.06);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 6px 16px;
+    min-width: 68px;
+    background: rgba(240, 240, 237, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(26, 26, 26, 0.18);
+    border-radius: 4px;
+    padding: 7px 12px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
-    color: #444;
-    opacity: 0;
-    transition: opacity 0.2s;
+    font-weight: 700;
+    text-align: center;
+    color: #1a1a1a;
+    opacity: 1;
     pointer-events: none;
-    letter-spacing: 0.5px;
+    letter-spacing: 0;
   }
 
-  .img-zoom-badge.visible {
-    opacity: 1;
+  .img-zoom-close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10003;
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(26, 26, 26, 0.2);
+    border-radius: 4px;
+    background: rgba(240, 240, 237, 0.9);
+    color: #1a1a1a;
+    font: 24px/1 Arial, sans-serif;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: color 140ms ease, background 140ms ease;
+  }
+
+  .img-zoom-close:hover {
+    background: #1a1a1a;
+    color: #fff;
+  }
+
+  @media (max-width: 640px) {
+    .img-zoom-close { top: 12px; right: 12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .img-zoom-overlay,
+    .img-zoom-stage img,
+    .img-zoom-close { transition: none; }
   }
 
   .post-body :where(p) {
@@ -174,7 +213,6 @@ const postJsonLd = {
        Image Zoom Lightbox — scroll to zoom, drag to pan, dblclick toggle
        ================================================================ */
     const MARGIN = 0.85;
-    const ZOOM_STEP = 0.3;
     const MIN_ZOOM = 0.5;
     const MAX_ZOOM = 10;
     const DBLCLICK_ZOOM = 2.5;
@@ -185,20 +223,22 @@ const postJsonLd = {
     overlay.innerHTML = `
       <div class="img-zoom-stage"></div>
       <div class="img-zoom-badge"></div>
+      <button class="img-zoom-close" type="button" aria-label="关闭图片预览" title="关闭 (Esc)">×</button>
     `;
     document.body.appendChild(overlay);
 
     const stage     = overlay.querySelector('.img-zoom-stage');
     const img       = stage.appendChild(document.createElement('img'));
     const badge     = overlay.querySelector('.img-zoom-badge');
+    const closeButton = overlay.querySelector('.img-zoom-close');
 
     /* --- State --- */
-    let zoom      = MIN_ZOOM;       // user-zoom multiplier (1 = fit-screen)
+    let zoom      = 1;              // user-zoom multiplier (1 = fit-screen)
     let panX      = 0;             // px offset from centered position
     let panY      = 0;
     let baseScale = 1;             // scale that makes image fit 90vw/90vh
     let nw = 0, nh = 0;            // natural image dimensions
-    let badgeTimer = 0;
+    let previousBodyOverflow = '';
 
     /* ================================================================
        Helpers
@@ -220,14 +260,6 @@ const postJsonLd = {
     /** Total CSS scale = baseScale * zoom */
     function totalScale() { return baseScale * zoom; }
 
-    /** Image top-left in viewport coords at current state */
-    function imgLeft() {
-      return (vpW()  - nw * totalScale()) / 2 + panX;
-    }
-    function imgTop() {
-      return (vpH() - nh * totalScale()) / 2 + panY;
-    }
-
     /** Recompute baseScale from natural dims & viewport */
     function recalcBase() {
       if (!nw || !nh) return;
@@ -241,10 +273,8 @@ const postJsonLd = {
     /** Apply current state to the DOM */
     function applyTransform(animate = false) {
       const ts = totalScale();
-      const l = imgLeft();
-      const t = imgTop();
       img.classList.toggle('transitioning', animate);
-      img.style.transform = `translate(${l}px, ${t}px) scale(${ts})`;
+      img.style.transform = `translate(-50%, -50%) translate(${panX}px, ${panY}px) scale(${ts})`;
     }
 
     /** Constrain pan so image edges never leave viewport edges */
@@ -276,18 +306,15 @@ const postJsonLd = {
       }
     }
 
-    /** Flash the zoom-percentage badge for 1.2 s */
+    /** Keep the current zoom percentage visible while the viewer is open. */
     function showBadge() {
       const pct = Math.round(zoom * 100);
       badge.textContent = pct + '%';
-      badge.classList.add('visible');
-      clearTimeout(badgeTimer);
-      badgeTimer = setTimeout(() => badge.classList.remove('visible'), 1200);
     }
 
     /** Reset to fit-screen */
     function resetView(animate = false) {
-      zoom = MIN_ZOOM;
+      zoom = 1;
       panX = 0;
       panY = 0;
       clampPan();
@@ -310,6 +337,7 @@ const postJsonLd = {
         recalcBase();
         resetView(false);
         overlay.classList.add('active');
+        previousBodyOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
       }
 
@@ -322,10 +350,10 @@ const postJsonLd = {
 
     function close() {
       overlay.classList.remove('active');
-      document.body.style.overflow = '';
-      badge.classList.remove('visible');
-      clearTimeout(badgeTimer);
-      setTimeout(() => { img.src = ''; }, 300);
+      document.body.style.overflow = previousBodyOverflow;
+      setTimeout(() => {
+        if (!overlay.classList.contains('active')) img.src = '';
+      }, 300);
     }
 
     /* ================================================================
@@ -336,19 +364,15 @@ const postJsonLd = {
       e.preventDefault();
 
       const oldZoom = zoom;
-      const delta = -Math.sign(e.deltaY) * ZOOM_STEP;
-      zoom = clamp(oldZoom + delta * (oldZoom * 0.5 + 0.5), MIN_ZOOM, MAX_ZOOM);
+      const normalizedDelta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+      zoom = clamp(oldZoom * Math.exp(-normalizedDelta * 0.0015), MIN_ZOOM, MAX_ZOOM);
       if (zoom === oldZoom) return;
 
-      // Keep the point under the cursor pinned
-      const cx = toOverlayX(e.clientX), cy = toOverlayY(e.clientY);
-      const oldLeft = imgLeft(), oldTop = imgTop();
-      panX = cx - (cx - oldLeft) * (zoom / oldZoom) - (vpW()  - nw * totalScale()) / 2;
-      panY = cy - (cy - oldTop)  * (zoom / oldZoom) - (vpH() - nh * totalScale()) / 2;
-
+      // Keep the image center fixed; panning remains available after overflow.
       clampPan();
       applyTransform(false);
       updateCursor();
+      showBadge();
     }, { passive: false });
 
     /* ================================================================
@@ -392,18 +416,14 @@ const postJsonLd = {
       if (!overlay.classList.contains('active')) return;
       e.preventDefault();
 
-      if (isOverflowing()) {
+      if (zoom > 1.05) {
         resetView(true);
         return;
       }
 
-      const oldZoom = zoom;
       zoom = DBLCLICK_ZOOM;
-      const cx = toOverlayX(e.clientX), cy = toOverlayY(e.clientY);
-      const oldLeft = imgLeft(), oldTop = imgTop();
-      panX = cx - (cx - oldLeft) * (zoom / oldZoom) - (vpW()  - nw * totalScale()) / 2;
-      panY = cy - (cy - oldTop)  * (zoom / oldZoom) - (vpH() - nh * totalScale()) / 2;
-
+      panX = 0;
+      panY = 0;
       clampPan();
       applyTransform(true);
       updateCursor();
@@ -493,6 +513,8 @@ const postJsonLd = {
       if (justDragged) { justDragged = false; return; }
       if (e.target === overlay || e.target === stage) close();
     });
+
+    closeButton.addEventListener('click', close);
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && overlay.classList.contains('active')) close();
