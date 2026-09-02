@@ -53,7 +53,33 @@ image: 'https://...'     # 可选，封面图片的 URL
 使用 Markdown 编写你的文章内容。
 ```
 
-### 2. 图片使用指南
+### 2. 添加新的 Note
+
+在 `src/content/notes/` 目录下创建 Markdown 文件，并在 Frontmatter 中填写标题、日期和状态：
+
+```markdown
+---
+title: '需要记录的事情'
+date: '2026-09-02'
+status: todo
+file: 'https://...' # 可选，相关附件的 URL
+---
+
+这里填写 Note 的正文。
+```
+
+`status` 用于表示 Note 当前所处的阶段，并显示在收据卡片的 `Status` 区域。该字段只接受以下四个值：
+
+| 字段值 | 页面显示 | 适用场景 |
+| :--- | :--- | :--- |
+| `todo` | `TODO` | 尚未开始、等待处理的事项 |
+| `in-progress` | `IN PROGRESS` | 正在处理或持续推进的事项 |
+| `done` | `COMPLETED` | 已经处理完成的事项 |
+| `archived` | `ARCHIVED` | 不再推进，但仍需保留的历史记录 |
+
+`status` 可以省略，省略时默认为 `todo`。状态值必须使用表格中的英文小写格式，否则 Astro 内容校验会在构建时报告错误。
+
+### 3. 图片使用指南
 
 **方式一：本地图片（推荐）**
 1. 将图片放入 `public/` 文件夹（建议新建 `public/images/` 文件夹）。
@@ -65,19 +91,19 @@ image: 'https://...'     # 可选，封面图片的 URL
 **方式二：在线图片**
 直接填写完整的图片 URL 地址即可。
 
-### 3. 修改 UI 组件
+### 4. 修改 UI 组件
 
 - **导航栏：** 编辑 `src/components/Navbar.tsx`。
 - **个人信息：** 编辑 `src/components/ProfileCard.tsx` 以更新头像、简介和社交链接。
 - **文章预览：** 编辑 `src/components/PostCard.tsx` 以更改文章在列表页的显示方式。
 - **图标：** 在 `src/components/Icons.tsx` 中添加或修改 SVG 图标。
 
-### 3. 布局与样式
+### 5. 布局与样式
 
 - **全局布局：** `src/layouts/BaseLayout.astro` 包含了 `<html>`、`<head>` 和 `<body>` 标签，以及全局样式（字体、滚动条等）。
 - **样式：** 项目使用 Tailwind CSS。你可以修改 `tailwind.config.mjs` 来自定义主题（如颜色、字体）。
 
-### 4. 配置
+### 6. 配置
 
 - **内容架构：** 如果你想为博客文章添加新字段（例如作者、阅读时间），请更新 `src/content/config.ts` 中的架构定义。
 - **Astro 配置：** `astro.config.mjs` 处理 React 和 Tailwind 等集成配置。

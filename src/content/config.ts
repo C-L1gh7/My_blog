@@ -16,8 +16,8 @@ const notes = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.string(),
+    status: z.enum(['todo', 'in-progress', 'done', 'archived']).optional().default('todo'),
     file: z.string().optional(),
-    tags: z.array(z.string()).optional(),
   }),
 });
 

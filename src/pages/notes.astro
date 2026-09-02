@@ -8,6 +8,20 @@ const notes = await getCollection('notes');
 const sortedNotes = notes.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 const years = [...new Set(sortedNotes.map((note) => new Date(note.data.date).getFullYear()))];
 const latestYear = years[0];
+const receiptCounts = new Map<string, number>();
+const notesWithReceiptIds = sortedNotes.map((note) => {
+  const date = new Date(note.data.date);
+  const dateCode = [
+    String(date.getFullYear()).slice(-2),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+  ].join('');
+  const sequence = receiptCounts.get(dateCode) ?? 0;
+  receiptCounts.set(dateCode, sequence + 1);
+  const suffix = sequence < 26 ? String.fromCharCode(65 + sequence) : String(sequence + 1);
+
+  return { note, receiptId: `N${dateCode}${suffix}` };
+});
 
 const title = "Personal Notes";
 ---
@@ -54,8 +68,8 @@ const title = "Personal Notes";
 
         <div class="grid grid-cols-1 items-start gap-x-5 gap-y-9 md:grid-cols-2 lg:grid-cols-3">
         {sortedNotes.length > 0 ? (
-            sortedNotes.map((note) => (
-                <NoteCard note={note} />
+            notesWithReceiptIds.map(({ note, receiptId }) => (
+                <NoteCard note={note} receiptId={receiptId} />
             ))
         ) : (
             <div class="border border-dashed border-black/30 bg-white/40 px-5 py-16 text-center">
